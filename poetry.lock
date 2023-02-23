@@ -238,7 +238,7 @@ name = "certifi"
 version = "2022.12.7"
 description = "Python package for providing Mozilla's CA Bundle."
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.6"
 files = [
     {file = "certifi-2022.12.7-py3-none-any.whl", hash = "sha256:4ad3232f5e926d6718ec31cfc1fcadfde020920e278684144551c91769c7bc18"},
@@ -339,7 +339,7 @@ name = "charset-normalizer"
 version = "3.0.1"
 description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 files = [
     {file = "charset-normalizer-3.0.1.tar.gz", hash = "sha256:ebea339af930f8ca5d7a699b921106c6e29c617fe9606fa7baa043c1cdae326f"},
@@ -776,7 +776,7 @@ name = "idna"
 version = "3.4"
 description = "Internationalized Domain Names in Applications (IDNA)"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.5"
 files = [
     {file = "idna-3.4-py3-none-any.whl", hash = "sha256:90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2"},
@@ -1218,6 +1218,55 @@ SecretStorage = {version = ">=3.2", markers = "sys_platform == \"linux\""}
 completion = ["shtab"]
 docs = ["furo", "jaraco.packaging (>=9)", "jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "sphinx (>=3.5)"]
 testing = ["flake8 (<5)", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=1.3)", "pytest-flake8", "pytest-mypy (>=0.9.1)"]
+
+[[package]]
+name = "liftover"
+version = "1.1.16"
+description = "Package for converting between genome build coordinates"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "liftover-1.1.16-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:1403d1af7f2cbfa8189c6b512da3f0bc7d416abfb9a2bb359cdb24238ef62e4d"},
+    {file = "liftover-1.1.16-cp310-cp310-manylinux_2_12_i686.manylinux2010_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:ef80eb4fba4353fd10098706a50dc583edd9e982d821583087b0e0fd77259964"},
+    {file = "liftover-1.1.16-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1fc83b1d95849fceb7c35abbee15bd67cb024eebd3bc1e208e9769c556d84be2"},
+    {file = "liftover-1.1.16-cp310-cp310-musllinux_1_1_i686.whl", hash = "sha256:fdb5270edeee4bfc030d77dbb824f6ccb20e9187d02e88fad353010637e4da01"},
+    {file = "liftover-1.1.16-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:e903fdf35951fb19e73e2553d7994dc9517a4561c3500cfbe3a8ae9b34658bac"},
+    {file = "liftover-1.1.16-cp310-cp310-win32.whl", hash = "sha256:2bc54654bfccde5a7d4784712c4d261063b8cecd823282fb700badc9d01469a2"},
+    {file = "liftover-1.1.16-cp310-cp310-win_amd64.whl", hash = "sha256:5d7f11ffeff0892fbb8afe7208839c9bd7c638854d7fe5c8d773b82d0a42dbba"},
+    {file = "liftover-1.1.16-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:257af580aad8cf6cfc54f7da254da64ae303c8670fc2cfbe6c056c4ed7a7c43e"},
+    {file = "liftover-1.1.16-cp311-cp311-manylinux_2_12_i686.manylinux2010_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:18c2db0ad3648a55c4ca38dac073b831d4e19cf7fac2b92eae8e1d8f0894f125"},
+    {file = "liftover-1.1.16-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3b1feafca7253636a0bd28dc0ca71c17cd7a77c1995b69260bf3e2f6fd809c6e"},
+    {file = "liftover-1.1.16-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:1a0c8955380a39772f6e7baa0bdf4cae6d5bf544503c0d39a8f76c7609cdb84d"},
+    {file = "liftover-1.1.16-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:fc4058f10b0bdfc333bbb31d17ce7b19aff0dee18d9b33e465c4a2fef9cde6db"},
+    {file = "liftover-1.1.16-cp311-cp311-win32.whl", hash = "sha256:cea945fedad9b57ff64d3d485a69bcb9070f53216a5b5a7f1e8ea7ea6c536e39"},
+    {file = "liftover-1.1.16-cp311-cp311-win_amd64.whl", hash = "sha256:e4a9c949e2548bc2c24569254bd492be7dfd8b9567dd2b6238c182f977b9c9ab"},
+    {file = "liftover-1.1.16-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:83c8ab632f702faf300bfd8bac71e13bfdc2f4e8ce6940bd1537d86fdad57144"},
+    {file = "liftover-1.1.16-cp37-cp37m-manylinux_2_12_i686.manylinux2010_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:1980015434892fcaf250c083d4ea95c38eec25d91e0a7791b65c7c64cb8e24c4"},
+    {file = "liftover-1.1.16-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:51e4afcd5434a67e2b6cf0a77a5619113a7731d38535821ee84c0f01e200326d"},
+    {file = "liftover-1.1.16-cp37-cp37m-musllinux_1_1_i686.whl", hash = "sha256:f64e7660fce8fb0a998adb57930daa26c52666f9d5f63abec5755a570b19ea2a"},
+    {file = "liftover-1.1.16-cp37-cp37m-musllinux_1_1_x86_64.whl", hash = "sha256:22f8f03df1ab52bbc0e41b9100450bbbe2631a2d6e925ad44f7044c61d46b9d1"},
+    {file = "liftover-1.1.16-cp37-cp37m-win32.whl", hash = "sha256:566e048440cd42528db123c68aa72756b5406aff0cda36cd5786f9a06c190b9f"},
+    {file = "liftover-1.1.16-cp37-cp37m-win_amd64.whl", hash = "sha256:508b018073ac7b1c00ed211b4d145596efa6d8c33dda4b678f355b3f4548537b"},
+    {file = "liftover-1.1.16-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:d9438ef907eed0ee14df5ab36fd578e8522a1bfcc9cbc91e6a6c01c97127e7ef"},
+    {file = "liftover-1.1.16-cp38-cp38-manylinux_2_12_i686.manylinux2010_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:429ecdd54b760fed308ac39d685240970e4720ca4cb97df7753dd03baf7400a7"},
+    {file = "liftover-1.1.16-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6cd987c75417ddbccc6d3842735cdda5fd622cf5ec979cc68d9f80b19163b639"},
+    {file = "liftover-1.1.16-cp38-cp38-musllinux_1_1_i686.whl", hash = "sha256:765dab5333d23072bad81b8beb56f7ea7675f1a2106527b36e2309a71c1d3318"},
+    {file = "liftover-1.1.16-cp38-cp38-musllinux_1_1_x86_64.whl", hash = "sha256:cb2f18a2affe8527e202f1ac3024ce197df48243bfcbb9f4b0b64131d15b7c8a"},
+    {file = "liftover-1.1.16-cp38-cp38-win32.whl", hash = "sha256:a28cff2953254a883d133a78dbe5a17f8ebe39602df47765c6e0ba187a6e2461"},
+    {file = "liftover-1.1.16-cp38-cp38-win_amd64.whl", hash = "sha256:7131bf66443c9671a1780ceae2a471b88a2033e1f61e0ffd3bcac3e3da8b85b9"},
+    {file = "liftover-1.1.16-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:a05951e417640e4c895a6c765f2430ca6ac2a7e1ccf950a4d9515d27062eca59"},
+    {file = "liftover-1.1.16-cp39-cp39-manylinux_2_12_i686.manylinux2010_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:3decaef7fe612cf2661d67d8494caeeb94943d54dae3768bc7e189aadce1492a"},
+    {file = "liftover-1.1.16-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f5718684f3e14ca2369eabda01041e4435d9ab4ebe88efd996be645271e5a0bc"},
+    {file = "liftover-1.1.16-cp39-cp39-musllinux_1_1_i686.whl", hash = "sha256:b3874bdce971fdcf33dc29c33136186f1d50af9667e13c37d2c4f62788928abf"},
+    {file = "liftover-1.1.16-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:16a0a527167984c4702f696b0a87d4fadafe3b17cfdda21b618eb238484258d2"},
+    {file = "liftover-1.1.16-cp39-cp39-win32.whl", hash = "sha256:ba059125d4b611ebf5d72773cdaf4c0236d0b14813ce0844fdc6dde84bd90e76"},
+    {file = "liftover-1.1.16-cp39-cp39-win_amd64.whl", hash = "sha256:f937d1bfbfc91d5bebff6eb20d50e9ab5e7a524f0941e721cd6827f353e97842"},
+    {file = "liftover-1.1.16.tar.gz", hash = "sha256:fc1c92ef3279b61a2ccfd8c3cdb9cb4829b11a0f9356d15097c611fc0064fd0f"},
+]
+
+[package.dependencies]
+urllib3 = "*"
 
 [[package]]
 name = "markdown"
@@ -2588,7 +2637,7 @@ name = "requests"
 version = "2.28.2"
 description = "Python HTTP for Humans."
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.7, <4"
 files = [
     {file = "requests-2.28.2-py3-none-any.whl", hash = "sha256:64299f4909223da747622c030b781c0d7811e359c37124b4bd368fb8c6518baa"},
@@ -2963,7 +3012,7 @@ name = "urllib3"
 version = "1.26.14"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 category = "main"
-optional = true
+optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
 files = [
     {file = "urllib3-1.26.14-py2.py3-none-any.whl", hash = "sha256:75edcdc2f7d85b137124a6c3c9fc3933cdeaa12ecb9a6a959f22797a0feca7e1"},
@@ -3114,4 +3163,4 @@ test = ["pytest", "black", "isort", "mypy", "flake8", "flake8-docstrings", "pyte
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "ef98aea7a842ba7cbf2ea91400a87ce4e4584a2ff48a2b03c7618ecb0bd2a5d0"
+content-hash = "28e235c4d82ed1e76896e9e6eb583e83b0bab36326432a72c9b1806dfb8742bb"

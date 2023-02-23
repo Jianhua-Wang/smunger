@@ -9,6 +9,8 @@ from typing import Optional
 
 import pandas as pd
 
+from .constant import ColName
+
 logger = logging.getLogger('io')
 
 
@@ -78,6 +80,7 @@ def save_sumstats(sumstats: pd.DataFrame, filename: Path, build_index: bool = Tr
 
     if filename.suffix == '.gz':
         filename = filename.with_suffix('')
+    sumstats = sumstats.sort_values(by=[ColName.CHR, ColName.BP])
     sumstats.to_csv(filename, sep='\t', index=False, header=True)
 
     # compress the file

@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.6] (2023-02-23)
+
+* liftover
+
 ## [0.0.5] (2023-02-23)
 
 * save significant snps
