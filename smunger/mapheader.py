@@ -1,14 +1,15 @@
 """Main module."""
 
-import pandas as pd
-from rich.table import Table
-from rich.prompt import Confirm
 import json
 from typing import Optional
+from pathlib import Path
 
-from smunger.constant import ColName, COMMON_COLNAMES
+import pandas as pd
+from rich.prompt import Confirm
+from rich.table import Table
+
 from smunger.console import console
-
+from smunger.constant import COMMON_COLNAMES, ColName
 
 # display first five rows of input dataframe, and guess the column names
 # that are most likely to be the column names of munged dataframe
@@ -54,7 +55,7 @@ def display_df(df: pd.DataFrame, colname_map: dict, nrows: int = 5):
         console.print(f"Missing columns: {missing_colnames}")
 
 
-def map_colnames(df: pd.DataFrame, outfile: Optional[str] = None) -> dict:
+def map_colnames(df: pd.DataFrame, outfile: Optional[Path] = None) -> dict:
     """Map column names."""
     # map column names
     guessed_map = guess_colnames(df)
@@ -79,7 +80,7 @@ def map_colnames(df: pd.DataFrame, outfile: Optional[str] = None) -> dict:
             else:
                 manual_map = df.columns[int(manual_map)]
                 colname_map[manual_map] = col
-        # TODO: use OR if BETA is not found
+        # use OR if BETA is not found
         if ColName.BETA not in colname_map.values() or ColName.SE not in colname_map.values():
             console.print("BETA is not found.")
             for col in [ColName.OR, ColName.ORSE, ColName.Z]:

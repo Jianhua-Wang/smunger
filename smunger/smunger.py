@@ -1,17 +1,17 @@
 """Main module."""
 
-import pandas as pd
 import json
-from typing import Union
 import logging
+from typing import Union
 
-from smunger.constant import ColName, ColType, ColRange
+import pandas as pd
 
+from smunger.constant import ColName, ColRange, ColType
 
 logger = logging.getLogger('munger')
 
 
-def make_SNPID_unique(sumstat: pd.DataFrame, replace_rsIDcol: bool = False, remove_duplicates: bool = True):
+def make_SNPID_unique(sumstat: pd.DataFrame) -> pd.DataFrame:
     """
     Make the SNPID unique.
 
@@ -21,10 +21,6 @@ def make_SNPID_unique(sumstat: pd.DataFrame, replace_rsIDcol: bool = False, remo
     ----------
     sumstat : pd.DataFrame
         The input summary statistics.
-    replace_rsIDcol : bool, optional
-        Whether to replace the rsID column with the unique SNPID, by default False
-    remove_duplicates : bool, optional
-        Whether to remove the duplicated SNPs, keep the one with smallest P-value, by default True
 
     Returns
     -------
@@ -45,22 +41,11 @@ def make_SNPID_unique(sumstat: pd.DataFrame, replace_rsIDcol: bool = False, remo
         + "-"
         + allele_df[ColName.NEA]
     )
-    if replace_rsIDcol:
-        df[ColName.RSID] = allele_df[ColName.SNPID]
-    else:
-        df.insert(loc=0, column=ColName.SNPID, value=allele_df[ColName.SNPID].values)  # type: ignore
-    if remove_duplicates:
-        df.sort_values(ColName.P, inplace=True)
-        if replace_rsIDcol:
-            df.drop_duplicates(subset=[ColName.RSID], keep="first", inplace=True)
-        else:
-            df.drop_duplicates(subset=[ColName.SNPID], keep="first", inplace=True)
-        df.sort_values([ColName.CHR, ColName.BP], inplace=True)
-        df.reset_index(drop=True, inplace=True)
+    df.insert(loc=0, column=ColName.SNPID, value=allele_df[ColName.SNPID].values)  # type: ignore
     return df
 
 
-def map_colnames(df: pd.DataFrame, colname_map: Union[dict, str]) -> pd.DataFrame:
+def extract_cols(df: pd.DataFrame, colname_map: Union[dict, str]) -> pd.DataFrame:
     """Map column names."""
     # map column names
     if isinstance(colname_map, str):
@@ -79,7 +64,7 @@ def checl_colnames(df: pd.DataFrame) -> pd.DataFrame:
     for col in ColName.OUTCOLS:
         if col not in outdf.columns:
             outdf[col] = None
-    return outdf
+    return outdf[ColName.OUTCOLS]
 
 
 def rm_col_allna(df: pd.DataFrame) -> pd.DataFrame:
@@ -87,8 +72,81 @@ def rm_col_allna(df: pd.DataFrame) -> pd.DataFrame:
     outdf = df.copy()
     for col in outdf.columns:
         if outdf[col].isnull().all():
-            logger.info(f"Remove column {col} because it is all NA.")
+            logger.debug(f"Remove column {col} because it is all NA.")
             outdf.drop(col, axis=1, inplace=True)
+    return outdf
+
+
+def get_sigdf(df: pd.DataFrame, pval: float = 5e-8) -> pd.DataFrame:
+    """Get significant SNPs."""
+    outdf = df.copy()
+    if ColName.P in outdf.columns:
+        outdf = outdf[outdf[ColName.P] < pval]
+    else:
+        raise ValueError("Missing P column.")
+    return outdf
+
+
+def munge(df: pd.DataFrame) -> pd.DataFrame:
+    """Munge the summary statistics."""
+    outdf = df.copy()
+    if all(
+        [
+            ColName.CHR in outdf.columns,
+            ColName.BP in outdf.columns,
+            ColName.EA in outdf.columns,
+            ColName.NEA in outdf.columns,
+        ]
+    ):
+        outdf = munge_chr(outdf)
+        outdf = munge_bp(outdf)
+        outdf = munge_allele(outdf)
+        outdf = make_SNPID_unique(outdf)
+        if ColName.P in outdf.columns:
+            outdf = munge_pvalue(outdf)
+            outdf = outdf.sort_values(by=ColName.P)
+        else:
+            pass
+        pre_n = outdf.shape[0]
+        outdf = outdf.drop_duplicates(subset=ColName.SNPID, keep="first")
+        outdf = outdf.sort_values(by=[ColName.CHR, ColName.BP])
+        after_n = outdf.shape[0]
+        logger.debug(f"Remove {pre_n - after_n} duplicated SNPs.")
+    else:
+        raise ValueError("Missing CHR, BP, EA or NEA column.")
+
+    # outdf = munge_rsid(outdf)
+    if ColName.BETA in outdf.columns and ColName.SE in outdf.columns:
+        outdf = munge_beta(outdf)
+        outdf = munge_se(outdf)
+    elif ColName.OR in outdf.columns and ColName.ORSE in outdf.columns:
+        outdf = munge_or(outdf)
+        outdf = munge_orse(outdf)
+        outdf[ColName.BETA] = outdf[ColName.OR]
+        outdf[ColName.SE] = outdf[ColName.ORSE] / outdf[ColName.OR]
+        outdf = munge_beta(outdf)
+        outdf = munge_se(outdf)
+        del outdf[ColName.OR]
+        del outdf[ColName.ORSE]
+    else:
+        logger.warning("Missing BETA or SE column.")
+
+    if ColName.Z in outdf.columns:
+        outdf = munge_z(outdf)
+
+    if ColName.EAF in outdf.columns:
+        outdf = munge_eaf(outdf)
+        outdf[ColName.MAF] = outdf[ColName.EAF]
+    if ColName.MAF in outdf.columns:
+        outdf = munge_maf(outdf)
+    outdf = checl_colnames(outdf)
+    return outdf
+
+
+def munge_rsid(df: pd.DataFrame) -> pd.DataFrame:
+    """Munge rsID column."""
+    outdf = df.copy()
+    outdf[ColName.RSID] = outdf[ColName.RSID].astype(ColType.RSID)
     return outdf
 
 
@@ -96,7 +154,7 @@ def munge_chr(df: pd.DataFrame) -> pd.DataFrame:
     """Munge chromosome column."""
     pre_n = df.shape[0]
     outdf = df[df[ColName.CHR].notnull()].copy()
-    outdf[ColName.CHR] = outdf[ColName.CHR].astype(ColType.CHR)
+    outdf[ColName.CHR] = outdf[ColName.CHR].astype(str)
     outdf[ColName.CHR] = outdf[ColName.CHR].str.replace("chr", "")
     # replace X, with 23
     outdf[ColName.CHR] = outdf[ColName.CHR].replace("X", 23)
@@ -106,8 +164,8 @@ def munge_chr(df: pd.DataFrame) -> pd.DataFrame:
     outdf = outdf[outdf[ColName.CHR].notnull()]
     outdf = outdf[(outdf[ColName.CHR] >= ColRange.CHR_MIN) & (outdf[ColName.CHR] <= ColRange.CHR_MAX)]
     after_n = outdf.shape[0]
-    logger.info(f"Remove {pre_n - after_n} rows because of invalid chromosome.")
-    outdf[ColName.CHR] = outdf[ColName.CHR].astype(int)
+    logger.debug(f"Remove {pre_n - after_n} rows because of invalid chromosome.")
+    outdf[ColName.CHR] = outdf[ColName.CHR].astype(ColType.CHR)
     return outdf
 
 
@@ -119,7 +177,7 @@ def munge_bp(df: pd.DataFrame) -> pd.DataFrame:
     outdf = outdf[outdf[ColName.BP].notnull()]
     outdf = outdf[(outdf[ColName.BP] > ColRange.BP_MIN) & (outdf[ColName.BP] < ColRange.BP_MAX)]
     after_n = outdf.shape[0]
-    logger.info(f"Remove {pre_n - after_n} rows because of invalid position.")
+    logger.debug(f"Remove {pre_n - after_n} rows because of invalid position.")
     outdf[ColName.BP] = outdf[ColName.BP].astype(ColType.BP)
     return outdf
 
@@ -135,7 +193,7 @@ def munge_allele(df: pd.DataFrame) -> pd.DataFrame:
         # make sure all alleles only contain one or more ACGT characters
         outdf = outdf[outdf[col].str.match(r"^[ACGT]+$")]
         after_n = outdf.shape[0]
-        logger.info(f"Remove {pre_n - after_n} rows because of invalid {col}.")
+        logger.debug(f"Remove {pre_n - after_n} rows because of invalid {col}.")
     outdf = outdf[outdf[ColName.EA] != outdf[ColName.NEA]]
     return outdf
 
@@ -148,7 +206,7 @@ def munge_pvalue(df: pd.DataFrame) -> pd.DataFrame:
     outdf = outdf[outdf[ColName.P].notnull()]
     outdf = outdf[(outdf[ColName.P] > ColRange.P_MIN) & (outdf[ColName.P] < ColRange.P_MAX)]
     after_n = outdf.shape[0]
-    logger.info(f"Remove {pre_n - after_n} rows because of invalid pvalue.")
+    logger.debug(f"Remove {pre_n - after_n} rows because of invalid pvalue.")
     outdf[ColName.P] = outdf[ColName.P].astype(ColType.P)
     return outdf
 
@@ -160,7 +218,7 @@ def munge_beta(df: pd.DataFrame) -> pd.DataFrame:
     outdf[ColName.BETA] = pd.to_numeric(outdf[ColName.BETA], errors="coerce")
     outdf = outdf[outdf[ColName.BETA].notnull()]
     after_n = outdf.shape[0]
-    logger.info(f"Remove {pre_n - after_n} rows because of invalid beta.")
+    logger.debug(f"Remove {pre_n - after_n} rows because of invalid beta.")
     outdf[ColName.BETA] = outdf[ColName.BETA].astype(ColType.BETA)
     return outdf
 
@@ -173,7 +231,7 @@ def munge_se(df: pd.DataFrame) -> pd.DataFrame:
     outdf = outdf[outdf[ColName.SE].notnull()]
     outdf = outdf[outdf[ColName.SE] > ColRange.SE_MIN]
     after_n = outdf.shape[0]
-    logger.info(f"Remove {pre_n - after_n} rows because of invalid se.")
+    logger.debug(f"Remove {pre_n - after_n} rows because of invalid se.")
     outdf[ColName.SE] = outdf[ColName.SE].astype(ColType.SE)
     return outdf
 
@@ -185,7 +243,7 @@ def munge_or(df: pd.DataFrame) -> pd.DataFrame:
     outdf[ColName.OR] = pd.to_numeric(outdf[ColName.OR], errors="coerce")
     outdf = outdf[outdf[ColName.OR].notnull()]
     after_n = outdf.shape[0]
-    logger.info(f"Remove {pre_n - after_n} rows because of invalid or.")
+    logger.debug(f"Remove {pre_n - after_n} rows because of invalid or.")
     outdf[ColName.OR] = outdf[ColName.OR].astype(ColType.OR)
     return outdf
 
@@ -198,7 +256,7 @@ def munge_orse(df: pd.DataFrame) -> pd.DataFrame:
     outdf = outdf[outdf[ColName.ORSE].notnull()]
     outdf = outdf[outdf[ColName.ORSE] > ColRange.ORSE_MIN]
     after_n = outdf.shape[0]
-    logger.info(f"Remove {pre_n - after_n} rows because of invalid orse.")
+    logger.debug(f"Remove {pre_n - after_n} rows because of invalid orse.")
     outdf[ColName.ORSE] = outdf[ColName.ORSE].astype(ColType.ORSE)
     return outdf
 
@@ -210,7 +268,7 @@ def munge_z(df: pd.DataFrame) -> pd.DataFrame:
     outdf[ColName.Z] = pd.to_numeric(outdf[ColName.Z], errors="coerce")
     outdf = outdf[outdf[ColName.Z].notnull()]
     after_n = outdf.shape[0]
-    logger.info(f"Remove {pre_n - after_n} rows because of invalid z.")
+    logger.debug(f"Remove {pre_n - after_n} rows because of invalid z.")
     outdf[ColName.Z] = outdf[ColName.Z].astype(ColType.Z)
     return outdf
 
@@ -223,7 +281,7 @@ def munge_eaf(df: pd.DataFrame) -> pd.DataFrame:
     outdf = outdf[outdf[ColName.EAF].notnull()]
     outdf = outdf[(outdf[ColName.EAF] >= ColRange.EAF_MIN) & (outdf[ColName.EAF] <= ColRange.EAF_MAX)]
     after_n = outdf.shape[0]
-    logger.info(f"Remove {pre_n - after_n} rows because of invalid eaf.")
+    logger.debug(f"Remove {pre_n - after_n} rows because of invalid eaf.")
     outdf[ColName.EAF] = outdf[ColName.EAF].astype(ColType.EAF)
     return outdf
 
@@ -237,6 +295,6 @@ def munge_maf(df: pd.DataFrame) -> pd.DataFrame:
     outdf[ColName.MAF] = outdf[ColName.MAF].apply(lambda x: 1 - x if x > 0.5 else x)
     outdf = outdf[(outdf[ColName.MAF] >= ColRange.MAF_MIN) & (outdf[ColName.MAF] <= ColRange.MAF_MAX)]
     after_n = outdf.shape[0]
-    logger.info(f"Remove {pre_n - after_n} rows because of invalid maf.")
+    logger.debug(f"Remove {pre_n - after_n} rows because of invalid maf.")
     outdf[ColName.MAF] = outdf[ColName.MAF].astype(ColType.MAF)
     return outdf

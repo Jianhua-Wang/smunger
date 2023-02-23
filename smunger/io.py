@@ -1,12 +1,13 @@
 """Read and write data from/to files."""
 
-import pandas as pd
-from pathlib import Path
-from typing import Optional
 import gzip
-from subprocess import run, PIPE
 import logging
-import time
+import shutil
+from pathlib import Path
+from subprocess import PIPE, run
+from typing import Optional
+
+import pandas as pd
 
 logger = logging.getLogger('io')
 
@@ -45,7 +46,29 @@ def load_sumstats(
     )
 
 
-def save_sumstats(sumstats: pd.DataFrame, filename: Path, tabix: bool = True):
+def check_tool(tool: str) -> str:
+    """
+    Check if tool is installed.
+
+    Parameters
+    ----------
+    tool : str
+        The tool name.
+
+    Returns
+    -------
+    str
+        The path of the tool if it is installed, otherwise exit the program.
+    """
+    tool_path = shutil.which(tool)
+    if tool_path:
+        return tool_path
+    else:
+        logger.error(f"{tool} is not installed. Please install it first and make sure it is in your PATH.")
+        raise ValueError(f"{tool} is not installed. Please install it first and make sure it is in your PATH.")
+
+
+def save_sumstats(sumstats: pd.DataFrame, filename: Path, build_index: bool = True):
     """Save summary statistics to a file."""
     # save the summary statistics to a file
     if isinstance(filename, str):
@@ -58,8 +81,14 @@ def save_sumstats(sumstats: pd.DataFrame, filename: Path, tabix: bool = True):
     sumstats.to_csv(filename, sep='\t', index=False, header=True)
 
     # compress the file
-    run(['bgzip', '-f', filename], stdout=PIPE, stderr=PIPE, check=True)
+    bgzip = check_tool('bgzip')
+    run([bgzip, '-f', filename], stdout=PIPE, stderr=PIPE, check=True)
     # index the file
-    if tabix:
-        time.sleep(10)
-        run(['tabix', '-f', '-p', 'vcf', filename.with_suffix('.gz')], stdout=PIPE, stderr=PIPE, check=True)
+    if build_index:
+        tabix = check_tool('tabix')
+        run(
+            [tabix, '-f', '-S', '1', '-s', '1', '-b', '2', '-e', '2', f'{filename}.gz'],
+            stdout=PIPE,
+            stderr=PIPE,
+            check=True,
+        )
