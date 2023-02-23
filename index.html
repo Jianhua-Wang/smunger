@@ -443,7 +443,183 @@
 </ul>
 <h3 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h3>
 <ul>
-<li>TODO</li>
+<li>[ ]  define column properties<ul>
+<li>[x]  required columns: CHR, BP, EA, NEA</li>
+<li>[x]  optional columns: BETA, SE, P, EAF, MAF</li>
+<li>[x]  Auxiliary columns: OR, OR_SE, Z</li>
+<li>[x]  Data types</li>
+<li>[x]  Data ranges</li>
+<li>[ ]  Allow missing values and default missing values</li>
+</ul>
+</li>
+<li>[ ]  semi-automatically header mapping<ul>
+<li>[x]  read first five rows and display in terminal</li>
+<li>[x]  guess header map by common column names</li>
+<li>[x]  manually check if the mapping is correct</li>
+<li>[x]  input the right column number if it is wrong</li>
+<li>[x]  check if OR, OR_SE, Z are present if BETA, SE are absent</li>
+<li>[x]  save the final column map to json for further munging</li>
+</ul>
+</li>
+<li>
+<p>[ ]  data munging</p>
+<ul>
+<li>[ ]  EA ≠ NEA</li>
+<li>[ ]  if EAF presents, MAF = min(EAF, 1-EAF)</li>
+<li>[ ]  remove duplicate SNPs with same chr-bp-sorted(EA,NEA), keep the one with lowest P</li>
+<li>[ ]  </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>CHR</th>
+<th>BP</th>
+<th>rsID</th>
+<th>EA</th>
+<th>NEA</th>
+<th>EAF</th>
+<th>MAF</th>
+<th>BETA</th>
+<th>SE</th>
+<th>P</th>
+<th>OR</th>
+<th>OR_SE</th>
+<th>Z</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>int</td>
+<td>int</td>
+<td>str</td>
+<td>str</td>
+<td>str</td>
+<td>float</td>
+<td>float</td>
+<td>float</td>
+<td>float</td>
+<td>float</td>
+<td>float</td>
+<td>float</td>
+<td>float</td>
+</tr>
+<tr>
+<td>allow null</td>
+<td>False</td>
+<td>False</td>
+<td>True</td>
+<td>False</td>
+<td>False</td>
+<td>False</td>
+<td>False</td>
+<td>True</td>
+<td>False</td>
+<td>True</td>
+<td>True</td>
+<td>False</td>
+<td>True</td>
+</tr>
+<tr>
+<td>null value</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0.999</td>
+<td>1</td>
+<td></td>
+<td>0</td>
+</tr>
+<tr>
+<td>range</td>
+<td>[1,23]</td>
+<td>(0,inf)</td>
+<td></td>
+<td>only contains 'ACGT'</td>
+<td>only contains 'ACGT'</td>
+<td>[0,1]</td>
+<td>[0,0.5]</td>
+<td>(-inf,inf)</td>
+<td>(0, inf)</td>
+<td>(0,1)</td>
+<td>(0, inf)</td>
+<td>(0, inf)</td>
+<td>(-inf,inf)</td>
+</tr>
+<tr>
+<td>- [ ]  liftover</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- [ ]  guess genome build</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- [ ]  liftover</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- [ ]  annotate</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
 </ul>
 <h3 id="credits">Credits<a class="headerlink" href="#credits" title="Permanent link">&para;</a></h3>
 <p>This package was created with <a href="https://github.com/audreyr/cookiecutter">Cookiecutter</a> and the <a href="https://github.com/waynerv/cookiecutter-pypackage">waynerv/cookiecutter-pypackage</a> project template.</p>
