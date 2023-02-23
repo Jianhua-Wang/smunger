@@ -22,7 +22,7 @@ def load_sumstats(
     """Load summary statistics from a file."""
     # determine whether the file is gzipped
     if gzipped is None:
-        gzipped = filename.suffix == '.gz'
+        gzipped = filename.suffix.endswith('gz')
 
     # read the first line of the file to determine the separator
     if sep is None:
