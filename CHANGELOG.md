@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.0.5] (2023-02-23)
+
+* save significant snps
+* save report
+
 ## [0.0.4] (2023-02-23)
 
 * header map
