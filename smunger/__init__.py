@@ -26,7 +26,7 @@ from .smunger import (
 
 __author__ = """Jianhua Wang"""
 __email__ = 'jianhua.mert@gmail.com'
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 
 # Set up logging
 logging.basicConfig(
