@@ -1,7 +1,7 @@
 """Main module."""
 
 import json
-from typing import Optional
+from typing import Optional, Iterable
 from pathlib import Path
 
 import pandas as pd
@@ -16,7 +16,7 @@ from smunger.constant import COMMON_COLNAMES, ColName
 # display the guessed column map, let user to confirm
 # if user confirms, then use the guessed column map
 # if user does not confirm, then ask user to input the column map
-# batch mode: remember the column map for each input file
+# TODO:batch mode: remember the column map for each input file
 
 
 def display_df(df: pd.DataFrame, colname_map: dict, nrows: int = 5):
@@ -55,48 +55,54 @@ def display_df(df: pd.DataFrame, colname_map: dict, nrows: int = 5):
         console.print(f"Missing columns: {missing_colnames}")
 
 
-def map_colnames(df: pd.DataFrame, outfile: Optional[Path] = None) -> dict:
-    """Map column names."""
-    # map column names
-    guessed_map = guess_colnames(df)
-    display_df(df, guessed_map)
-    use_guessed_map = Confirm.ask("Do you want to use the guessed column map?", default=True)
-    if use_guessed_map:
-        colname_map = guessed_map
-    else:
-        colname_map = {}
-        guess_orignal_out = {v: k for k, v in guessed_map.items()}
-        for col in ColName.OUTCOLS:
+def manul_map(df_cols: Iterable, guessed_map: dict = {}) -> dict:
+    """Manual map."""
+    colname_map = {}
+    df_cols = list(df_cols)
+    guess_orignal_out = {v: k for k, v in guessed_map.items()}
+    for col in ColName.OUTCOLS:
+        if col in guess_orignal_out:
+            map_correct = Confirm.ask(
+                f"Is {guess_orignal_out[col]} the correct column name for {col}?", default=True
+            )
+            if map_correct:
+                colname_map[guess_orignal_out[col]] = col
+                continue
+        manual_map = input(f"Please input the correct column number for {col}: ")
+        if manual_map == '':
+            continue
+        else:
+            manual_map = df_cols[int(manual_map)]
+            colname_map[manual_map] = col
+    # use OR if BETA is not found
+    if ColName.BETA not in colname_map.values() or ColName.SE not in colname_map.values():
+        console.print("BETA is not found.")
+        for col in [ColName.OR, ColName.ORSE, ColName.Z]:
             if col in guess_orignal_out:
                 map_correct = Confirm.ask(
                     f"Is {guess_orignal_out[col]} the correct column name for {col}?", default=True
                 )
                 if map_correct:
                     colname_map[guess_orignal_out[col]] = col
-                    continue
-            manual_map = input(f"Please input the correct column number for {col}: ")
-            if manual_map == '':
-                continue
-            else:
-                manual_map = df.columns[int(manual_map)]
-                colname_map[manual_map] = col
-        # use OR if BETA is not found
-        if ColName.BETA not in colname_map.values() or ColName.SE not in colname_map.values():
-            console.print("BETA is not found.")
-            for col in [ColName.OR, ColName.ORSE, ColName.Z]:
-                if col in guess_orignal_out:
-                    map_correct = Confirm.ask(
-                        f"Is {guess_orignal_out[col]} the correct column name for {col}?", default=True
-                    )
-                    if map_correct:
-                        colname_map[guess_orignal_out[col]] = col
+                else:
+                    manual_map = input(f"Please input the correct column number for {col}: ")
+                    if manual_map == '':
+                        continue
                     else:
-                        manual_map = input(f"Please input the correct column number for {col}: ")
-                        if manual_map == '':
-                            continue
-                        else:
-                            manual_map = df.columns[int(manual_map)]
-                            colname_map[manual_map] = col
+                        manual_map = df_cols[int(manual_map)]
+                        colname_map[manual_map] = col
+    return colname_map
+
+
+def map_colnames(df: pd.DataFrame, outfile: Optional[Path] = None) -> dict:
+    """Map column names."""
+    guessed_map = guess_colnames(df.columns)
+    display_df(df, guessed_map)
+    use_guessed_map = Confirm.ask("Do you want to use the guessed column map?", default=True)
+    if use_guessed_map:
+        colname_map = guessed_map
+    else:
+        colname_map = manul_map(df.columns, guessed_map)
     console.print(f"Column map is: {colname_map}")
     display_df(df, colname_map)
     if outfile:
@@ -106,11 +112,10 @@ def map_colnames(df: pd.DataFrame, outfile: Optional[Path] = None) -> dict:
     return colname_map
 
 
-def guess_colnames(df: pd.DataFrame) -> dict:
+def guess_colnames(df_cols: Iterable[str]) -> dict:
     """Guess column names."""
-    # guess column names
     colnames = {}
-    for col in df.columns:
+    for col in df_cols:
         if col in COMMON_COLNAMES:
             colnames[col] = COMMON_COLNAMES[col]
     return colnames
