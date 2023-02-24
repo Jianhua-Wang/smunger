@@ -1,0 +1,12 @@
+{
+    "other_allele": "NEA",
+    "effect_allele": "EA",
+    "beta": "BETA",
+    "standard_error": "SE",
+    "p_value": "P",
+    "chromosome": "CHR",
+    "base_pair_location": "BP",
+    "odds_ratio": "OR",
+    "variant_id": "rsID",
+    "effect_allele_frequency": "EAF"
+}

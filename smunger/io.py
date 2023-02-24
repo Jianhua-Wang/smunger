@@ -41,7 +41,9 @@ def load_sumstats(
             sep = ','
         else:
             sep = ' '
-
+    logger.info(f'File {filename} is gzipped: {gzipped}')
+    logger.info(f'Separator is {sep}')
+    logger.info(f'loading data from {filename}')
     # determine the separator, automatically if not specified
     return pd.read_csv(
         filename, sep=sep, nrows=nrows, skiprows=skiprows, comment=comment, compression='gzip' if gzipped else None
@@ -81,17 +83,30 @@ def save_sumstats(sumstats: pd.DataFrame, filename: Path, build_index: bool = Tr
     if filename.suffix == '.gz':
         filename = filename.with_suffix('')
     sumstats = sumstats.sort_values(by=[ColName.CHR, ColName.BP])
+    logger.info(f'Saving summary statistics to {filename}')
     sumstats.to_csv(filename, sep='\t', index=False, header=True)
 
     # compress the file
-    bgzip = check_tool('bgzip')
-    run([bgzip, '-f', filename], stdout=PIPE, stderr=PIPE, check=True)
+    compress(filename)
     # index the file
     if build_index:
-        tabix = check_tool('tabix')
-        run(
-            [tabix, '-f', '-S', '1', '-s', '1', '-b', '2', '-e', '2', f'{filename}.gz'],
-            stdout=PIPE,
-            stderr=PIPE,
-            check=True,
-        )
+        index(str(filename) + '.gz')
+
+
+def compress(filename: Path):
+    """Compress a file with bgzip."""
+    bgzip = check_tool('bgzip')
+    logger.info(f'Compressing {filename} with bgzip')
+    run([bgzip, '-f', str(filename)], stdout=PIPE, stderr=PIPE, check=True)
+
+
+def index(filename: str, start: int = 1, end: int = 2, skip: int = 1):
+    """Index a file with tabix."""
+    tabix = check_tool('tabix')
+    logger.info(f'Indexing {filename} with tabix')
+    run(
+        [tabix, '-f', '-S', str(skip), '-s', str(start), '-b', str(end), '-e', str(end), filename],
+        stdout=PIPE,
+        stderr=PIPE,
+        check=True,
+    )

@@ -23,6 +23,8 @@ from .smunger import (
     munge_se,
     munge_z,
 )
+from .liftover import liftover, liftover_file
+from .annotate import annotate_rsid
 
 __author__ = """Jianhua Wang"""
 __email__ = 'jianhua.mert@gmail.com'
@@ -30,8 +32,8 @@ __version__ = '0.0.6'
 
 # Set up logging
 logging.basicConfig(
-    level="INFO",
-    format="%(message)s",
+    level=logging.NOTSET,
+    format="%(name)s - %(message)s",
     datefmt="[%X]",
-    handlers=[RichHandler(rich_tracebacks=True)],
+    handlers=[RichHandler(rich_tracebacks=True, show_path=False)],
 )

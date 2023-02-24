@@ -72,13 +72,41 @@ def guess_genome_build(df: pd.DataFrame) -> str:
     return build_guess
 
 
-def liftover(df: pd.DataFrame, inbuild: str, outbuild: str) -> pd.DataFrame:
+def liftover(
+    df: pd.DataFrame,
+    inbuild: str,
+    outbuild: str,
+    chrom_col: str = ColName.CHR,
+    pos_col: str = ColName.BP,
+) -> pd.DataFrame:
     """Liftover summary statistics from one genome build to another."""
     lo = get_lifter(inbuild, outbuild)
-    df[outbuild] = df[[ColName.CHR, ColName.BP]].apply(lambda x: lo.query(x[0], x[1]), axis=1)
-    df[ColName.CHR] = df[outbuild].apply(lambda x: x[0][0] if len(x) > 0 else 0)
-    df[ColName.BP] = df[outbuild].apply(lambda x: x[0][1] if len(x) > 0 else 0)
+    df[outbuild] = df[[chrom_col, pos_col]].apply(lambda x: lo.query(x[0], x[1]), axis=1)
+    df[chrom_col] = df[outbuild].apply(lambda x: x[0][0] if len(x) > 0 else 0)
+    df[pos_col] = df[outbuild].apply(lambda x: x[0][1] if len(x) > 0 else 0)
     df.drop(outbuild, axis=1, inplace=True)
     df = munge_chr(df)
     df = munge_bp(df)
     return df
+
+
+def liftover_file(
+    infile: str,
+    outfile: str,
+    inbuild: str,
+    outbuild: str,
+    chrom_col: str = ColName.CHR,
+    pos_col: str = ColName.BP,
+) -> None:
+    """Liftover summary statistics from one genome build to another."""
+    chunksize = 100000
+    logger.info(f'liftover {infile}...')
+    ith = 0
+    for df in pd.read_csv(infile, sep='\t', chunksize=chunksize):
+        logger.info(f'processing chunk {ith}...')
+        df = liftover(df, inbuild, outbuild, chrom_col, pos_col)
+        ith += 1
+        if ith == 1:
+            df.to_csv(outfile, sep='\t', index=False)
+        else:
+            df.to_csv(outfile, sep='\t', index=False, mode='a')

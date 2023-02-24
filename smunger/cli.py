@@ -2,7 +2,7 @@
 
 import logging
 from pathlib import Path
-
+from enum import Enum
 import typer
 
 from smunger import __version__, console
@@ -44,6 +44,7 @@ def mapheader(
     """Map column names."""
     from smunger.io import load_sumstats
     from smunger.mapheader import map_colnames
+
     df = load_sumstats(infile, nrows=nrows, sep=sep, skiprows=skiprows, comment=comment, gzipped=gzipped)
     map_colnames(df, outfile=outfile)
 
@@ -65,6 +66,7 @@ def munge(
     """Munge summary statistics."""
     import smunger
     from smunger.io import load_sumstats, save_sumstats
+
     df = load_sumstats(infile, sep=sep, skiprows=skiprows, comment=comment, gzipped=gzipped)
     pre_nrow = len(df)
     df = smunger.extract_cols(df, colname_map=colmap)
@@ -72,6 +74,7 @@ def munge(
     after_nrow = len(df)
     save_sumstats(df, outfile, build_index=build_index)
     from smunger.smunger import get_sigdf
+
     df_sig = get_sigdf(df, pval=sigsnps_pval)
     if sigsnps:
         if len(df_sig) > 0:
@@ -87,8 +90,49 @@ def munge(
     }
     if report:
         import json
+
         with open(report, 'w') as f:
             json.dump(report_json, f, indent=4)
+
+
+class Build(str, Enum):
+    """Genome Builds."""
+
+    hg17 = 'hg17'
+    hg18 = 'hg18'
+    hg19 = 'hg19'
+    hg38 = 'hg38'
+
+
+@app.command()
+def liftover(
+    infile: str = typer.Argument(..., help='Input summary statistics.'),
+    outfile: str = typer.Argument(..., help='Output munged summary statistics.'),
+    inbuild: Build = typer.Option(..., '--inbuild', '-i', help='Input build.'),
+    outbuild: Build = typer.Option(..., '--outbuild', '-o', help='Output build.'),
+    chromcol: str = typer.Option('CHR', '--chromcol', '-C', help='chromosome column.'),
+    poscol: str = typer.Option('BP', '--poscol', '-p', help='position column.'),
+):
+    """Liftover summary statistics."""
+    from smunger.liftover import liftover_file
+
+    liftover_file(infile, outfile, inbuild, outbuild, chromcol, poscol)
+
+
+@app.command()
+def annorsid(
+    infile: str = typer.Argument(..., help='Input summary statistics.'),
+    outfile: str = typer.Argument(..., help='Output munged summary statistics.'),
+    database: str = typer.Option(..., '--database', '-d', help='Database.'),
+    chunksize: int = typer.Option(2000000, '--chunksize', '-c', help='Chunk size.'),
+    rsidcol: str = typer.Option('rsID', '--rsidcol', '-r', help='rsid column.'),
+    chromcol: str = typer.Option('CHR', '--chromcol', '-C', help='chromosome column.'),
+    poscol: str = typer.Option('BP', '--poscol', '-p', help='position column.'),
+):
+    """Annotate rsid."""
+    from smunger.annotate import annotate_rsid
+
+    annotate_rsid(infile, outfile, database, chunksize, rsidcol, chromcol, poscol)
 
 
 if __name__ == "__main__":

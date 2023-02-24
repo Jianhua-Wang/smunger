@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.7] (2023-02-24)
+
+* annotate rsid
+
 ## [0.0.6] (2023-02-23)
 
 * liftover
