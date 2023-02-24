@@ -153,21 +153,6 @@ html5lib = ["html5lib"]
 lxml = ["lxml"]
 
 [[package]]
-name = "biomart"
-version = "0.9.2"
-description = "Python API that consumes the biomart webservice"
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "biomart-0.9.2-py3-none-any.whl", hash = "sha256:69fd29b42efac99370951eed3f9ece9ae9b01868e85d104d9877f8cb99e7bd0f"},
-    {file = "biomart-0.9.2.tar.gz", hash = "sha256:a75e53b1bea4abae0b3a9deab389333ea00f2f88c75f66ab332002ee30862619"},
-]
-
-[package.dependencies]
-requests = ">=2.2"
-
-[[package]]
 name = "black"
 version = "23.1.0"
 description = "The uncompromising code formatter."
@@ -3189,4 +3174,4 @@ test = ["pytest", "black", "isort", "mypy", "flake8", "flake8-docstrings", "pyte
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "868d4ad15d51747de1a8b0060fb8303287f1d0e5f0159b9f608e4198afbf6cd8"
+content-hash = "1951c37543f26118741087b93e7e1197c91453cfb6be80d44901d9bdee9a17ba"

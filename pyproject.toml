@@ -50,7 +50,6 @@ pandas = "^1.5.3"
 rich = "^13.3.1"
 liftover = "^1.1.16"
 requests = "^2.28.2"
-biomart = "^0.9.2"
 pytabix = "^0.1"
 
 [tool.poetry.extras]
