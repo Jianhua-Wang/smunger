@@ -28,7 +28,7 @@ from .annotate import annotate_rsid
 
 __author__ = """Jianhua Wang"""
 __email__ = 'jianhua.mert@gmail.com'
-__version__ = '0.0.8'
+__version__ = '0.0.9'
 
 # Set up logging
 logging.basicConfig(
