@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.10] (2023-02-28)
+
+* change load_sumstat input type to Union[str, Path]
+
 ## [0.0.9] (2023-02-28)
 
 * support -log10P column

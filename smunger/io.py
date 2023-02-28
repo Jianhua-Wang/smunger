@@ -5,7 +5,7 @@ import logging
 import shutil
 from pathlib import Path
 from subprocess import PIPE, run
-from typing import Optional
+from typing import Optional, Union
 
 import pandas as pd
 
@@ -15,7 +15,7 @@ logger = logging.getLogger('io')
 
 
 def load_sumstats(
-    filename: Path,
+    filename: Union[str, Path],
     sep: Optional[str] = None,
     nrows: Optional[int] = None,
     skiprows: int = 0,
@@ -24,6 +24,8 @@ def load_sumstats(
 ) -> pd.DataFrame:
     """Load summary statistics from a file."""
     # determine whether the file is gzipped
+    if isinstance(filename, str):
+        filename = Path(filename)
     if gzipped is None:
         gzipped = filename.suffix.endswith('gz')
 
@@ -72,7 +74,7 @@ def check_tool(tool: str) -> str:
         raise ValueError(f"{tool} is not installed. Please install it first and make sure it is in your PATH.")
 
 
-def save_sumstats(sumstats: pd.DataFrame, filename: Path, build_index: bool = True):
+def save_sumstats(sumstats: pd.DataFrame, filename: Union[str, Path], build_index: bool = True):
     """Save summary statistics to a file."""
     # save the summary statistics to a file
     if isinstance(filename, str):
@@ -110,3 +112,12 @@ def index(filename: str, start: int = 1, end: int = 2, skip: int = 1):
         stderr=PIPE,
         check=True,
     )
+
+
+def export_sumstats(filename: Union[str, Path], chrom: Optional[int] = None,
+                    start: Optional[int] = None, end: Optional[int] = None,
+                    rename_headers: Optional[dict] = None,
+                    out_filename: Optional[Union[str, Path]] = None,
+                    gzipped: bool = True) -> pd.DataFrame:
+    """Export summary statistics to a file."""
+    raise NotImplementedError

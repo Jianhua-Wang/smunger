@@ -78,7 +78,7 @@ def munge(
     df_sig = get_sigdf(df, pval=sigsnps_pval)
     if sigsnps:
         if len(df_sig) > 0:
-            save_sumstats(df_sig, sigsnps, build_index=build_index)
+            save_sumstats(df_sig, sigsnps, build_index=False)
         else:
             console.print('[bold red]No significant SNPs found.[/bold red]')
     non_null_cols = df.columns[df.notnull().any()].tolist()
