@@ -84,7 +84,7 @@ def save_sumstats(sumstats: pd.DataFrame, filename: Path, build_index: bool = Tr
         filename = filename.with_suffix('')
     sumstats = sumstats.sort_values(by=[ColName.CHR, ColName.BP])
     logger.info(f'Saving summary statistics to {filename}')
-    sumstats.to_csv(filename, sep='\t', index=False, header=True)
+    sumstats.to_csv(filename, sep='\t', index=False, header=True, float_format='%g')
 
     # compress the file
     compress(filename)

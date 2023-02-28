@@ -91,6 +91,23 @@ def manul_map(df_cols: Iterable, guessed_map: dict = {}) -> dict:
                     else:
                         manual_map = df_cols[int(manual_map)]
                         colname_map[manual_map] = col
+    # use -log10(P) if P is not found
+    if ColName.P not in colname_map.values():
+        console.print("P is not found.")
+        for col in [ColName.NEGLOGP]:
+            if col in guess_orignal_out:
+                map_correct = Confirm.ask(
+                    f"Is {guess_orignal_out[col]} the correct column name for {col}?", default=True
+                )
+                if map_correct:
+                    colname_map[guess_orignal_out[col]] = col
+                else:
+                    manual_map = input(f"Please input the correct column number for {col}: ")
+                    if manual_map == '':
+                        continue
+                    else:
+                        manual_map = df_cols[int(manual_map)]
+                        colname_map[manual_map] = col
     return colname_map
 
 

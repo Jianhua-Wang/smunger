@@ -105,6 +105,11 @@ def munge(df: pd.DataFrame) -> pd.DataFrame:
         if ColName.P in outdf.columns:
             outdf = munge_pvalue(outdf)
             outdf = outdf.sort_values(by=ColName.P)
+        elif ColName.NEGLOGP in outdf.columns:
+            outdf = munge_neglogp(outdf)
+            outdf[ColName.P] = outdf[ColName.NEGLOGP].apply(lambda x: 10 ** (-x))
+            outdf = outdf.sort_values(by=ColName.P)
+        # TODO: use zscore to calculate pvalue, if pvalue is missing and zscore is present
         else:
             pass
         pre_n = outdf.shape[0]
@@ -208,6 +213,19 @@ def munge_pvalue(df: pd.DataFrame) -> pd.DataFrame:
     after_n = outdf.shape[0]
     logger.debug(f"Remove {pre_n - after_n} rows because of invalid pvalue.")
     outdf[ColName.P] = outdf[ColName.P].astype(ColType.P)
+    return outdf
+
+
+def munge_neglogp(df: pd.DataFrame) -> pd.DataFrame:
+    """Munge neglogp column."""
+    outdf = df.copy()
+    pre_n = outdf.shape[0]
+    outdf[ColName.NEGLOGP] = pd.to_numeric(outdf[ColName.NEGLOGP], errors="coerce")
+    outdf = outdf[outdf[ColName.NEGLOGP].notnull()]
+    outdf = outdf[outdf[ColName.NEGLOGP] > ColRange.NEGLOGP_MIN]
+    after_n = outdf.shape[0]
+    logger.debug(f"Remove {pre_n - after_n} rows because of invalid neglogp.")
+    outdf[ColName.NEGLOGP] = outdf[ColName.NEGLOGP].astype(ColType.NEGLOGP)
     return outdf
 
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.9] (2023-02-28)
+
+* support -log10P column
+
 ## [0.0.8] (2023-02-24)
 
 * manul header map

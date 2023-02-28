@@ -13,6 +13,7 @@ class ColName:
     EA = "EA"
     NEA = "NEA"
     P = "P"
+    NEGLOGP = "-log10P"
     BETA = "BETA"
     OR = "OR"
     ORSE = "ORSE"
@@ -34,6 +35,7 @@ class ColType:
     EA = str
     NEA = str
     P = float
+    NEGLOGP = float
     BETA = float
     OR = float
     ORSE = float
@@ -83,6 +85,7 @@ class ColRange:
     MAF_MAX = 1
     ORSE_MIN = 0
     ORSE_MAX = np.inf
+    NEGLOGP_MIN = 0
 
 
 COMMON_COLNAMES = {
@@ -295,4 +298,8 @@ COMMON_COLNAMES = {
     'base_pair_locations': 'BP',
     'ZScore': 'Zscore',
     'stderr': 'SE',
+    'pval(-log10)': '-log10P',
+    '-log10P': '-log10P',
+    '-log10p': '-log10P',
+    '-log10Pvalue': '-log10P',
 }
