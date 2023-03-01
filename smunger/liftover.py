@@ -8,7 +8,7 @@ import requests  # type: ignore
 from liftover import get_lifter
 
 from smunger.constant import ColName
-# from smunger.smunger import munge_bp, munge_chr
+from smunger.smunger import munge_bp, munge_chr
 
 logger = logging.getLogger('liftover')
 
@@ -81,12 +81,18 @@ def liftover(
 ) -> pd.DataFrame:
     """Liftover summary statistics from one genome build to another."""
     lo = get_lifter(inbuild, outbuild)
+    df = df.rename(columns={chrom_col: ColName.CHR, pos_col: ColName.BP})
+    df = munge_chr(df)
+    df = munge_bp(df)
+    df[ColName.CHR] = 'chr' + df[ColName.CHR].astype(str)
+    df[ColName.CHR] = df[ColName.CHR].str.replace('chr23', 'chrX')
     df[outbuild] = df[[chrom_col, pos_col]].apply(lambda x: lo.query(x[0], x[1]), axis=1)
     df[chrom_col] = df[outbuild].apply(lambda x: x[0][0] if len(x) > 0 else 0)
     df[pos_col] = df[outbuild].apply(lambda x: x[0][1] if len(x) > 0 else 0)
     df.drop(outbuild, axis=1, inplace=True)
-    # df = munge_chr(df)
-    # df = munge_bp(df)
+    df = munge_chr(df)
+    df = munge_bp(df)
+    df = df.rename(columns={ColName.CHR: chrom_col, ColName.BP: pos_col})
     return df
 
 

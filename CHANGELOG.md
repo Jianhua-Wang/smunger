@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.0.12] (2023-03-01)
+
+* still munge after liftover
+* check chr, bp before liftover
+
 ## [0.0.11] (2023-03-01)
 
 * no munge after liftover
