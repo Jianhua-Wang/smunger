@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.11] (2023-03-01)
+
+* no munge after liftover
+
 ## [0.0.10] (2023-02-28)
 
 * change load_sumstat input type to Union[str, Path]

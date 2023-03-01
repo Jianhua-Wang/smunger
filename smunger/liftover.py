@@ -8,7 +8,7 @@ import requests  # type: ignore
 from liftover import get_lifter
 
 from smunger.constant import ColName
-from smunger.smunger import munge_bp, munge_chr
+# from smunger.smunger import munge_bp, munge_chr
 
 logger = logging.getLogger('liftover')
 
@@ -85,8 +85,8 @@ def liftover(
     df[chrom_col] = df[outbuild].apply(lambda x: x[0][0] if len(x) > 0 else 0)
     df[pos_col] = df[outbuild].apply(lambda x: x[0][1] if len(x) > 0 else 0)
     df.drop(outbuild, axis=1, inplace=True)
-    df = munge_chr(df)
-    df = munge_bp(df)
+    # df = munge_chr(df)
+    # df = munge_bp(df)
     return df
 
 
