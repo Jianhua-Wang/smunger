@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.13] (2023-03-01)
+
+* fix bug in 0.0.12
+
 ## [0.0.12] (2023-03-01)
 
 * still munge after liftover
