@@ -52,10 +52,7 @@ def extract_cols(df: pd.DataFrame, colname_map: Union[dict, str]) -> pd.DataFram
         with open(colname_map, 'r') as f:
             colname_map = json.load(f)
     colname_map = dict(colname_map)  # type: ignore
-    for k, v in colname_map.items():
-        if v not in df.columns:
-            logger.warning(f"Column {v} not in the input file, remove it from the map.")
-            del colname_map[k]
+    colname_map = {k: v for k, v in colname_map.items() if k in df.columns}
     outdf = df.rename(columns=colname_map).copy()
     mapped_cols = list(colname_map.values())
     outdf = outdf[mapped_cols]  # type: ignore
