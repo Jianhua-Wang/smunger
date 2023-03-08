@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.14] (2023-03-08)
+
+* skip missing column when map header
+
 ## [0.0.13] (2023-03-01)
 
 * fix bug in 0.0.12
