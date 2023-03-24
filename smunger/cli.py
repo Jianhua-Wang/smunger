@@ -52,14 +52,14 @@ def mapheader(
 @app.command()
 def munge(
     infile: Path = typer.Argument(..., help='Input summary statistics.'),
-    outfile: Path = typer.Argument(..., help='Output munged summary statistics.'),
+    outfile: str = typer.Argument(..., help='Output munged summary statistics.'),
     colmap: str = typer.Argument(..., help='Column map file, json.'),
     sep: str = typer.Option(None, '--sep', '-s', help='Separator of the input file.'),
     skiprows: int = typer.Option(0, '--skiprows', '-k', help='Number of rows to skip.'),
     comment: str = typer.Option(None, '--comment', '-c', help='Comment character.'),
     gzipped: bool = typer.Option(None, '--gzipped', '-z', help='Input file is gzipped.'),
     build_index: bool = typer.Option(True, '--build-index', '-b', help='Build tabix index.'),
-    sigsnps: Path = typer.Option(None, '--sigsnps', '-S', help='save significant SNPs to file.'),
+    sigsnps: str = typer.Option(None, '--sigsnps', '-S', help='save significant SNPs to file.'),
     sigsnps_pval: float = typer.Option(5e-8, '--sigsnps-pval', '-P', help='p-value threshold for significant SNPs.'),
     report: str = typer.Option(None, '--report', '-R', help='save report to file.'),
 ):
@@ -93,6 +93,34 @@ def munge(
 
         with open(report, 'w') as f:
             json.dump(report_json, f, indent=4)
+
+
+@app.command()
+def extract(
+    infile: str = typer.Argument(..., help='Input summary statistics.'),
+    outfile: str = typer.Argument(..., help='Output munged summary statistics.'),
+    rename_headers: str = typer.Option(None, '--rename-headers', '-r', help='Rename headers, json.'),
+    chrom: int = typer.Option(None, '--chrom', '-c', help='Chromosome.'),
+    start: int = typer.Option(None, '--start', '-s', help='Start position.'),
+    end: int = typer.Option(None, '--end', '-e', help='End position.'),
+    no_bgzip: bool = typer.Option(True, '--no-bgzip', '-z', help='Do not bgzip output file.'),
+):
+    """Extract columns."""
+    from smunger.io import export_sumstats
+    import json
+    if rename_headers:
+        headers_map = json.loads(rename_headers)
+    else:
+        headers_map = None
+    export_sumstats(
+        filename=infile,
+        out_filename=outfile,
+        rename_headers=headers_map,
+        chrom=chrom,
+        start=start,
+        end=end,
+        bgzipped=no_bgzip,
+    )
 
 
 class Build(str, Enum):

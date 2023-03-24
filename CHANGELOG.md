@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.0.16] (2023-03-09)
+
+* add export function
+* add harmonize function
+
 ## [0.0.15] (2023-03-08)
 
 * skip missing column when map header

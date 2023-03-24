@@ -3,12 +3,13 @@
 import gzip
 import logging
 import shutil
+import os
 from pathlib import Path
 from subprocess import PIPE, run
 from typing import Optional, Union
 
 import pandas as pd
-
+import tabix
 from .constant import ColName
 
 logger = logging.getLogger('io')
@@ -52,6 +53,16 @@ def load_sumstats(
     )
 
 
+def check_header(filename) -> bool:
+    """Check if the header of a file contains the required columns."""
+    header = load_sumstats(filename, nrows=5)
+    if list(header.columns) != list(ColName.OUTCOLS):
+        logger.error(f'Header of {filename} does not contain the required columns.')
+        raise ValueError(f'Header of {filename} does not contain the required columns.')
+    else:
+        return True
+
+
 def check_tool(tool: str) -> str:
     """
     Check if tool is installed.
@@ -74,28 +85,28 @@ def check_tool(tool: str) -> str:
         raise ValueError(f"{tool} is not installed. Please install it first and make sure it is in your PATH.")
 
 
-def save_sumstats(sumstats: pd.DataFrame, filename: Union[str, Path], build_index: bool = True):
+def save_sumstats(sumstats: pd.DataFrame, filename: str, build_index: bool = True, bgzipped: bool = True):
     """Save summary statistics to a file."""
     # save the summary statistics to a file
-    if isinstance(filename, str):
-        filename = Path(filename)
-    if filename.exists():
+    filename_path = Path(filename)
+    if filename_path.exists():
         logger.warning(f'File {filename} already exists. Overwriting.')
 
-    if filename.suffix == '.gz':
-        filename = filename.with_suffix('')
+    if filename_path.suffix == '.gz':
+        filename_path = filename_path.with_suffix('')
     sumstats = sumstats.sort_values(by=[ColName.CHR, ColName.BP])
-    logger.info(f'Saving summary statistics to {filename}')
-    sumstats.to_csv(filename, sep='\t', index=False, header=True, float_format='%g')
+    logger.info(f'Saving summary statistics to {filename_path}')
+    sumstats.to_csv(filename_path, sep='\t', index=False, header=True, float_format='%g')
 
     # compress the file
-    compress(filename)
+    if bgzipped:
+        compress(str(filename_path))
     # index the file
-    if build_index:
-        index(str(filename) + '.gz')
+    if build_index and bgzipped:
+        index(str(filename_path) + '.gz')
 
 
-def compress(filename: Path):
+def compress(filename: str):
     """Compress a file with bgzip."""
     bgzip = check_tool('bgzip')
     logger.info(f'Compressing {filename} with bgzip')
@@ -114,10 +125,30 @@ def index(filename: str, start: int = 1, end: int = 2, skip: int = 1):
     )
 
 
-def export_sumstats(filename: Union[str, Path], chrom: Optional[int] = None,
-                    start: Optional[int] = None, end: Optional[int] = None,
-                    rename_headers: Optional[dict] = None,
-                    out_filename: Optional[Union[str, Path]] = None,
-                    gzipped: bool = True) -> pd.DataFrame:
+def export_sumstats(
+    filename: str,
+    chrom: Optional[int] = None,
+    start: Optional[int] = None,
+    end: Optional[int] = None,
+    rename_headers: Optional[dict] = None,
+    out_filename: Optional[str] = None,
+    bgzipped: bool = True,
+) -> pd.DataFrame:
     """Export summary statistics to a file."""
-    raise NotImplementedError
+    if chrom and start and end:
+        logger.info(f'Loading summary statistics from {filename} for {chrom}:{start}-{end}')
+        if not os.path.exists(filename + '.tbi'):
+            raise FileNotFoundError(f'Index file {filename}tbi does not exist. Please index the file first.')
+        else:
+            tb = tabix.open(filename)
+            indf = pd.DataFrame(columns=ColName.OUTCOLS, data=tb.query(str(chrom), start, end))
+    else:
+        logger.info(f'Loading summary statistics from {filename}')
+        indf = load_sumstats(filename)
+    if rename_headers:
+        logger.info(f'Renaming headers to {rename_headers}')
+        indf = indf[list(rename_headers.keys())].copy()
+        indf = indf.rename(columns=rename_headers)
+    if out_filename:
+        save_sumstats(indf, out_filename, build_index=False, bgzipped=bgzipped)
+    return indf

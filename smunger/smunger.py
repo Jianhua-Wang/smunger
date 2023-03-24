@@ -324,6 +324,30 @@ def munge_maf(df: pd.DataFrame) -> pd.DataFrame:
 def calculate_lambda(df: pd.DataFrame) -> float:
     """Calculate lambda."""
     from scipy import stats
-    observed = np.median((df[ColName.BETA] / df[ColName.SE])**2)
+
+    observed = np.median((df[ColName.BETA] / df[ColName.SE]) ** 2)
     lambda_gc = observed / stats.chi2.ppf(0.5, 1)
     return lambda_gc  # type: ignore
+
+
+def harmonize(sumstat1, sumstat2) -> pd.DataFrame:
+    """Harmonize two sumstats."""
+    sumstat1 = make_SNPID_unique(sumstat1)
+    sumstat2 = make_SNPID_unique(sumstat2)
+    merged = pd.merge(sumstat1, sumstat2, on=ColName.SNPID, how="inner", suffixes=("_1", "_2"))
+    merged[f'{ColName.BETA}_2'] = merged[f'{ColName.BETA}_2'].where(
+        merged[f'{ColName.EA}_1'] == merged[f'{ColName.EA}_2'], -merged[f'{ColName.BETA}_2']
+    )
+    del merged[f'{ColName.EA}_2']
+    del merged[f'{ColName.NEA}_2']
+    del merged[f'{ColName.CHR}_2']
+    del merged[f'{ColName.BP}_2']
+    merged = merged.rename(
+        columns={
+            f'{ColName.EA}_1': ColName.EA,
+            f'{ColName.NEA}_1': ColName.NEA,
+            f'{ColName.CHR}_1': ColName.CHR,
+            f'{ColName.BP}_1': ColName.BP,
+        }
+    )
+    return merged

@@ -6,7 +6,7 @@ from rich.logging import RichHandler
 
 from .console import console
 from .constant import ColAllowNA, ColName, ColRange, ColType
-from .io import load_sumstats, save_sumstats
+from .io import load_sumstats, save_sumstats, check_header, export_sumstats
 from .mapheader import map_colnames
 from .smunger import (
     make_SNPID_unique,
@@ -22,6 +22,7 @@ from .smunger import (
     munge_pvalue,
     munge_se,
     munge_z,
+    harmonize,
 )
 from .liftover import liftover, liftover_file
 from .annotate import annotate_rsid
