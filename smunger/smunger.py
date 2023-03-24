@@ -4,6 +4,7 @@ import json
 import logging
 from typing import Union
 
+import numpy as np
 import pandas as pd
 
 from smunger.constant import ColName, ColRange, ColType
@@ -318,3 +319,11 @@ def munge_maf(df: pd.DataFrame) -> pd.DataFrame:
     logger.debug(f"Remove {pre_n - after_n} rows because of invalid maf.")
     outdf[ColName.MAF] = outdf[ColName.MAF].astype(ColType.MAF)
     return outdf
+
+
+def calculate_lambda(df: pd.DataFrame) -> float:
+    """Calculate lambda."""
+    from scipy import stats
+    observed = np.median((df[ColName.BETA] / df[ColName.SE])**2)
+    lambda_gc = observed / stats.chi2.ppf(0.5, 1)
+    return lambda_gc  # type: ignore

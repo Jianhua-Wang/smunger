@@ -51,6 +51,7 @@ rich = "^13.3.1"
 liftover = "^1.1.16"
 requests = "^2.28.2"
 pytabix = "^0.1"
+scipy = "^1.10.1"
 
 [tool.poetry.extras]
 test = [
