@@ -156,11 +156,13 @@ def annorsid(
     rsidcol: str = typer.Option('rsID', '--rsidcol', '-r', help='rsid column.'),
     chromcol: str = typer.Option('CHR', '--chromcol', '-C', help='chromosome column.'),
     poscol: str = typer.Option('BP', '--poscol', '-p', help='position column.'),
+    eacol: str = typer.Option('EA', '--eacol', '-e', help='effect allele column.'),
+    neacol: str = typer.Option('NEA', '--neacol', '-n', help='non-effect allele column.'),
 ):
     """Annotate rsid."""
     from smunger.annotate import annotate_rsid
 
-    annotate_rsid(infile, outfile, database, chunksize, rsidcol, chromcol, poscol)
+    annotate_rsid(infile, outfile, database, chunksize, rsidcol, chromcol, poscol, eacol, neacol)
 
 
 if __name__ == "__main__":

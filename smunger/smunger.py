@@ -12,7 +12,13 @@ from smunger.constant import ColName, ColRange, ColType
 logger = logging.getLogger('munger')
 
 
-def make_SNPID_unique(sumstat: pd.DataFrame) -> pd.DataFrame:
+def make_SNPID_unique(
+    sumstat: pd.DataFrame,
+    chrom_col: str = ColName.CHR,
+    pos_col: str = ColName.BP,
+    ea_col: str = ColName.EA,
+    nea_col: str = ColName.NEA,
+) -> pd.DataFrame:
     """
     Make the SNPID unique.
 
@@ -29,18 +35,18 @@ def make_SNPID_unique(sumstat: pd.DataFrame) -> pd.DataFrame:
         The summary statistics with unique SNPID.
     """
     df = sumstat.copy()
-    allele_df = df[[ColName.EA, ColName.NEA]].copy()
+    allele_df = df[[ea_col, nea_col]].copy()
     b = allele_df.values
     b.sort(axis=1)
-    allele_df[[ColName.EA, ColName.NEA]] = b
+    allele_df[[ea_col, nea_col]] = b
     allele_df[ColName.SNPID] = (
-        df[ColName.CHR].astype(str)
+        df[chrom_col].astype(str)
         + "-"
-        + df[ColName.BP].astype(str)
+        + df[pos_col].astype(str)
         + "-"
-        + allele_df[ColName.EA]
+        + allele_df[ea_col]
         + "-"
-        + allele_df[ColName.NEA]
+        + allele_df[nea_col]
     )
     df.insert(loc=0, column=ColName.SNPID, value=allele_df[ColName.SNPID].values)  # type: ignore
     return df

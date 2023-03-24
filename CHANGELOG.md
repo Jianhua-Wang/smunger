@@ -1,6 +1,10 @@
 # Changelog
 
-## [0.0.16] (2023-03-09)
+## [0.0.17] (2023-03-24)
+
+* annotate rsid include allele matching
+
+## [0.0.16] (2023-03-24)
 
 * add export function
 * add harmonize function

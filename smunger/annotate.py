@@ -4,6 +4,7 @@ import logging
 import tabix
 import pandas as pd
 from smunger.constant import ColName
+from smunger.smunger import make_SNPID_unique
 
 logger = logging.getLogger('annotate')
 
@@ -16,6 +17,8 @@ def annotate_rsid(
     rsid_col: str = ColName.RSID,
     chrom_col: str = ColName.CHR,
     pos_col: str = ColName.BP,
+    ea_col: str = ColName.EA,
+    nea_col: str = ColName.NEA,
 ) -> None:
     """Annotate a file with rsids."""
     tb = tabix.open(database)
@@ -25,15 +28,18 @@ def annotate_rsid(
             chr_df = chr_df.sort_values(pos_col)
             for i in range(chr_df[pos_col].min(), chr_df[pos_col].max(), chunksize):
                 chunk_df = chr_df[(chr_df[pos_col] >= i) & (chr_df[pos_col] < i + chunksize)].copy()
+                chunk_df = make_SNPID_unique(chunk_df, chrom_col, pos_col, ea_col, nea_col)
+                chunk_df = chunk_df.drop_duplicates(subset=[ColName.SNPID])
                 if len(chunk_df) == 0:
                     continue
                 rsid_map = pd.DataFrame(
-                    columns=['chr', 'bp', 'rsid', 'ref', 'alt'], data=tb.query('1', i - 1, i + chunksize)
+                    columns=[ColName.CHR, ColName.BP, 'rsid', 'ref', 'alt'], data=tb.query(str(chrom), i - 1, i + chunksize)
                 )
-                rsid_map = rsid_map.drop_duplicates(subset=['bp'])
-                rsid_map['bp'] = rsid_map['bp'].astype(int)
-                rsid_map = pd.Series(data=rsid_map['rsid'].values, index=rsid_map['bp'].values)
-                chunk_df[rsid_col] = chunk_df[pos_col].map(rsid_map)
+                rsid_map = make_SNPID_unique(rsid_map, ColName.CHR, ColName.BP, 'ref', 'alt')
+                rsid_map = rsid_map.drop_duplicates(subset=[ColName.SNPID])
+                rsid_map = pd.Series(data=rsid_map['rsid'].values, index=rsid_map[ColName.SNPID].values)
+                chunk_df[rsid_col] = chunk_df[ColName.SNPID].map(rsid_map)
+                del chunk_df[ColName.SNPID]
                 logging.info(f'Processing {chrom}:{i}-{i + chunksize}, chunk No.{ith}, {len(chunk_df)} rows.')
                 ith += 1
                 if ith == 1:
