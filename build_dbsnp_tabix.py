@@ -1,7 +1,6 @@
 """Build a tabix-indexed database of dbSNP data."""
 import json
 import bz2
-import numpy as np
 import pandas as pd
 import gzip
 from subprocess import call, check_output
@@ -83,14 +82,17 @@ with open(f'./merged_{version}.txt', 'w') as f_out:
                 for dbsnp1_merges in rs_obj['dbsnp1_merges']:
                     dbsnp1_merges = dbsnp1_merges['merged_rsid']
                     f_out.write(f"{dbsnp1_merges[0]}\t{dbsnp1_merges}\t{merge_into}\n")
-
+parsed_df = pd.read_csv(f'./merged_{version}.txt', sep='\t', names=['1', '2', '3'])
+parsed_df = parsed_df.sort_values(['1', '2'])
+parsed_df.to_csv(f'./merged_{version}.txt', sep='\t', index=False, header=False)
 
 # bgzip and tabix
 call(f'bgzip ./merged_{version}.txt', shell=True)
-call(f'tabix -s 1 -b 2 -e 2 ./merged_{version}.txt.gz', shell=True)
+call(f'tabix -C -s 1 -b 2 -e 2 ./merged_{version}.txt.gz', shell=True)
 
 # remove intermediate files
 call('rm ./GCF_000001405.25.gz', shell=True)
+call('rm ./GCF_000001405.25.gz.tbi', shell=True)
 call('rm ./GCF_000001405.25.nomultiallelic.gz', shell=True)
 call('rm ./refsnp-merged.json.bz2', shell=True)
 call(f'rm ./snp2pos_{version}_unsorted.txt', shell=True)

@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.18] (2023-03-28)
+
+* Build a tabix-indexed database of dbSNP data.
+
 ## [0.0.17] (2023-03-24)
 
 * annotate rsid include allele matching
