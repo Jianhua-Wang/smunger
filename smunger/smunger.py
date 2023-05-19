@@ -67,7 +67,7 @@ def extract_cols(df: pd.DataFrame, colname_map: Union[dict, str]) -> pd.DataFram
     return outdf
 
 
-def checl_colnames(df: pd.DataFrame) -> pd.DataFrame:
+def check_colnames(df: pd.DataFrame) -> pd.DataFrame:
     """Check column names, fill None if not presents."""
     outdf = df.copy()
     for col in ColName.OUTCOLS:
@@ -153,7 +153,7 @@ def munge(df: pd.DataFrame) -> pd.DataFrame:
         outdf[ColName.MAF] = outdf[ColName.EAF]
     if ColName.MAF in outdf.columns:
         outdf = munge_maf(outdf)
-    outdf = checl_colnames(outdf)
+    outdf = check_colnames(outdf)
     return outdf
 
 

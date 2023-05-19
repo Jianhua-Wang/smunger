@@ -33,7 +33,7 @@ __version__ = '0.0.18'
 
 # Set up logging
 logging.basicConfig(
-    level=logging.NOTSET,
+    level=logging.WARNING,
     format="%(name)s - %(message)s",
     datefmt="[%X]",
     handlers=[RichHandler(rich_tracebacks=True, show_path=False)],

@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.19] (2023-05-19)
+
+* Chang default logging level to Warning.
+
 ## [0.0.18] (2023-03-28)
 
 * Build a tabix-indexed database of dbSNP data.
