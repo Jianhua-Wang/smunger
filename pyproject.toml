@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "smunger"
-version = "0.0.21"
+version = "0.0.22"
 homepage = "https://github.com/jianhua/smunger"
 description = "munger for GWAS summary statistics."
 authors = ["Jianhua Wang <jianhua.mert@gmail.com>"]
