@@ -99,6 +99,7 @@ def get_sigdf(df: pd.DataFrame, pval: float = 5e-8) -> pd.DataFrame:
 def munge(df: pd.DataFrame) -> pd.DataFrame:
     """Munge the summary statistics."""
     outdf = df.copy()
+    outdf = rm_col_allna(outdf)
     if all(
         [
             ColName.CHR in outdf.columns,

@@ -1,8 +1,12 @@
 # Changelog
 
+## [0.0.20] (2023-05-19)
+
+* remove all nan columns before munge.
+
 ## [0.0.19] (2023-05-19)
 
-* Chang default logging level to Warning.
+* Chang default logging level to warning.
 
 ## [0.0.18] (2023-03-28)
 
