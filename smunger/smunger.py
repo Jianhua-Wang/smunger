@@ -79,6 +79,7 @@ def check_colnames(df: pd.DataFrame) -> pd.DataFrame:
 def rm_col_allna(df: pd.DataFrame) -> pd.DataFrame:
     """Remove columns that are all NA."""
     outdf = df.copy()
+    outdf = outdf.replace('', None)
     for col in outdf.columns:
         if outdf[col].isnull().all():
             logger.debug(f"Remove column {col} because it is all NA.")

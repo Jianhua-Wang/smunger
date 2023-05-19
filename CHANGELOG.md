@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.21] (2023-05-19)
+
+* replace empty string with nan before remove nan columns.
+
 ## [0.0.20] (2023-05-19)
 
 * remove all nan columns before munge.
