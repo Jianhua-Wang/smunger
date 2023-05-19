@@ -11,6 +11,7 @@ from typing import Optional, Union
 import pandas as pd
 import tabix
 from .constant import ColName
+from .smunger import munge
 
 logger = logging.getLogger('io')
 
@@ -142,6 +143,7 @@ def export_sumstats(
         else:
             tb = tabix.open(filename)
             indf = pd.DataFrame(columns=ColName.OUTCOLS, data=tb.query(str(chrom), start, end))
+            indf = munge(indf)
     else:
         logger.info(f'Loading summary statistics from {filename}')
         indf = load_sumstats(filename)
