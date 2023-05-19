@@ -48,6 +48,8 @@ def make_SNPID_unique(
         + "-"
         + allele_df[nea_col]
     )
+    if ColName.SNPID in df.columns:
+        df.drop(ColName.SNPID, axis=1, inplace=True)
     df.insert(loc=0, column=ColName.SNPID, value=allele_df[ColName.SNPID].values)  # type: ignore
     return df
 

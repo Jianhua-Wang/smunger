@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.23] (2023-05-19)
+
+* replace SNPID col if it exists when make unique SNPID.
+
 ## [0.0.22] (2023-05-19)
 
 * munge tabix export.
