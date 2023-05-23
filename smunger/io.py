@@ -17,7 +17,7 @@ logger = logging.getLogger('io')
 
 
 def load_sumstats(
-    filename: Union[str, Path],
+    filename: str,
     sep: Optional[str] = None,
     nrows: Optional[int] = None,
     skiprows: int = 0,
@@ -26,10 +26,8 @@ def load_sumstats(
 ) -> pd.DataFrame:
     """Load summary statistics from a file."""
     # determine whether the file is gzipped
-    if isinstance(filename, str):
-        filename = Path(filename)
     if gzipped is None:
-        gzipped = filename.suffix.endswith('gz')
+        gzipped = filename.endswith('gz')
 
     # read the first line of the file to determine the separator
     if sep is None:

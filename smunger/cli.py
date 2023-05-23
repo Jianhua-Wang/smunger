@@ -33,7 +33,7 @@ def main(
 
 @app.command()
 def mapheader(
-    infile: Path = typer.Argument(..., help='Input summary statistics.'),
+    infile: str = typer.Argument(..., help='Input summary statistics.'),
     outfile: Path = typer.Argument(..., help='Output file, json.'),
     sep: str = typer.Option(None, '--sep', '-s', help='Separator of the input file.'),
     nrows: int = typer.Option(5, '--nrows', '-n', help='Number of rows to display.'),
@@ -51,7 +51,7 @@ def mapheader(
 
 @app.command()
 def munge(
-    infile: Path = typer.Argument(..., help='Input summary statistics.'),
+    infile: str = typer.Argument(..., help='Input summary statistics.'),
     outfile: str = typer.Argument(..., help='Output munged summary statistics.'),
     colmap: str = typer.Argument(..., help='Column map file, json.'),
     sep: str = typer.Option(None, '--sep', '-s', help='Separator of the input file.'),

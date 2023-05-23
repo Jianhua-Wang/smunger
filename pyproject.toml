@@ -52,6 +52,7 @@ liftover = "^1.1.16"
 requests = "^2.28.2"
 pytabix = "^0.1"
 scipy = "^1.10.1"
+matplotlib = "^3.7.1"
 
 [tool.poetry.extras]
 test = [
