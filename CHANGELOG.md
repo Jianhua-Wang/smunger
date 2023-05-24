@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.24] (2023-05-24)
+
+* super fast manhattan plot and qq plot.
+
 ## [0.0.23] (2023-05-19)
 
 * replace SNPID col if it exists when make unique SNPID.

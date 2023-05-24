@@ -6,7 +6,7 @@ import shutil
 import os
 from pathlib import Path
 from subprocess import PIPE, run
-from typing import Optional, Union
+from typing import Optional
 
 import pandas as pd
 import tabix

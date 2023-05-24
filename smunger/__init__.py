@@ -26,6 +26,7 @@ from .smunger import (
 )
 from .liftover import liftover, liftover_file
 from .annotate import annotate_rsid
+from .plots import qqplot, get_qq_df, manhattan, get_manh_df, qqman
 
 __author__ = """Jianhua Wang"""
 __email__ = 'jianhua.mert@gmail.com'
