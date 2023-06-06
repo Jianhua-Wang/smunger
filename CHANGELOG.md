@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.25] (2023-06-06)
+
+* annotate rsid with pd.Dataframe
+
 ## [0.0.24] (2023-05-24)
 
 * super fast manhattan plot and qq plot.

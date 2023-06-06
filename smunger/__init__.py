@@ -25,7 +25,7 @@ from .smunger import (
     harmonize,
 )
 from .liftover import liftover, liftover_file
-from .annotate import annotate_rsid
+from .annotate import annotate_rsid, annotate_rsid_file
 from .plots import qqplot, get_qq_df, manhattan, get_manh_df, qqman
 
 __author__ = """Jianhua Wang"""

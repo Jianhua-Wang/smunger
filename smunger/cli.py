@@ -160,9 +160,9 @@ def annorsid(
     neacol: str = typer.Option('NEA', '--neacol', '-n', help='non-effect allele column.'),
 ):
     """Annotate rsid."""
-    from smunger.annotate import annotate_rsid
+    from smunger.annotate import annotate_rsid_file
 
-    annotate_rsid(infile, outfile, database, chunksize, rsidcol, chromcol, poscol, eacol, neacol)
+    annotate_rsid_file(infile, outfile, database, chunksize, rsidcol, chromcol, poscol, eacol, neacol)
 
 
 if __name__ == "__main__":
