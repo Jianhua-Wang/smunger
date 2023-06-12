@@ -33,7 +33,7 @@ def qqplot(qq_df: pd.DataFrame, ax, **kwargs):
     return ax
 
 
-def get_manh_df(indf: pd.DataFrame, x_y_ratio: float = 3, reduce_size: float = 0.1) -> pd.DataFrame:
+def get_manh_df(indf: pd.DataFrame, reduce_size: float = 0.3) -> pd.DataFrame:
     """Convert GWAS sumstat to dataframe for manhattan plot."""
     agg_offset = 0
     bp_offset = {}
@@ -43,9 +43,8 @@ def get_manh_df(indf: pd.DataFrame, x_y_ratio: float = 3, reduce_size: float = 0
     plotdf = indf[[ColName.CHR, ColName.BP, ColName.P]].copy()
     plotdf['x'] = plotdf[ColName.BP] + plotdf[ColName.CHR].map(bp_offset)
     plotdf['y'] = -np.log10(plotdf[ColName.P])
-    num_bins = int(1000000 * reduce_size)
-    num_x_bins = int(np.sqrt(num_bins * x_y_ratio))
-    num_y_bins = int(np.sqrt(num_bins / x_y_ratio))
+    num_x_bins = int(20000 * reduce_size)
+    num_y_bins = int(plotdf['y'].max() * 10 * reduce_size)
 
     x_bins = np.linspace(plotdf['x'].min(), plotdf['x'].max(), num_x_bins)
     y_bins = np.linspace(plotdf['y'].min(), plotdf['y'].max(), num_y_bins)

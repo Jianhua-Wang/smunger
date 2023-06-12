@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.26] (2023-06-12)
+
+* reduce manhattan size
+
 ## [0.0.25] (2023-06-06)
 
 * annotate rsid with pd.Dataframe
