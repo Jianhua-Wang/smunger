@@ -1,5 +1,11 @@
 # Changelog
 
+
+## [0.0.27] (2023-06-14)
+
+* annotate rsid no need unique SNPID
+
+
 ## [0.0.26] (2023-06-12)
 
 * reduce manhattan size

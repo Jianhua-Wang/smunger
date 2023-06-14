@@ -20,7 +20,7 @@ def annotate_rsid(
     """Annotate a dataframe with rsids."""
     tb = tabix.open(database)
     chunk_df = make_SNPID_unique(indf, chrom_col, pos_col, ea_col, nea_col)
-    chunk_df = chunk_df.drop_duplicates(subset=[ColName.SNPID])
+    # chunk_df = chunk_df.drop_duplicates(subset=[ColName.SNPID])
     if len(chunk_df) == 0:
         return pd.DataFrame()
     chrom = chunk_df[chrom_col].iloc[0]

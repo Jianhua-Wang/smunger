@@ -94,7 +94,7 @@ def manul_map(df_cols: Iterable, guessed_map: dict = {}) -> dict:
     # use -log10(P) if P is not found
     if ColName.P not in colname_map.values():
         console.print("P is not found.")
-        for col in [ColName.NEGLOGP]:
+        for col in [ColName.NEGLOGP]:  # TODO: use NEGLOGP if it is found
             if col in guess_orignal_out:
                 map_correct = Confirm.ask(
                     f"Is {guess_orignal_out[col]} the correct column name for {col}?", default=True
