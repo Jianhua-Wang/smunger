@@ -53,7 +53,7 @@ def annotate_rsid_file(
     for df in pd.read_csv(infile, sep='\t', chunksize=100000):
         for chrom, chr_df in df.groupby(chrom_col):
             chr_df = chr_df.sort_values(pos_col)
-            for i in range(chr_df[pos_col].min(), chr_df[pos_col].max(), chunksize):
+            for i in range(chr_df[pos_col].min(), chr_df[pos_col].max() + 1, chunksize):
                 chunk_df = chr_df[(chr_df[pos_col] >= i) & (chr_df[pos_col] < i + chunksize)].copy()
                 chunk_df = annotate_rsid(chunk_df, database, rsid_col, chrom_col, pos_col, ea_col, nea_col)
                 logging.info(f'Processing {chrom}:{i}-{i + chunksize}, chunk No.{ith}, {len(chunk_df)} rows.')

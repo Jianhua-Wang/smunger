@@ -1,6 +1,10 @@
 # Changelog
 
 
+## [0.1.0] (2023-06-14)
+
+* annotate rsid bug fix
+
 ## [0.0.27] (2023-06-14)
 
 * annotate rsid no need unique SNPID
