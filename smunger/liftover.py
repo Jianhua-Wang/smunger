@@ -115,4 +115,4 @@ def liftover_file(
         if ith == 1:
             df.to_csv(outfile, sep='\t', index=False)
         else:
-            df.to_csv(outfile, sep='\t', index=False, mode='a')
+            df.to_csv(outfile, sep='\t', index=False, mode='a', header=False)
