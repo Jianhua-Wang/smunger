@@ -25,27 +25,27 @@ packages = [
 python = ">=3.8,<3.12"
 typer = "^0.7.0"
 
-black = {version = ">=22.3.0", optional = true}
-isort  = { version = "^5.8.0", optional = true}
-flake8  = { version = "^3.9.2", optional = true}
-flake8-docstrings = { version = "^1.6.0", optional = true }
-mypy = {version = "^0.900", optional = true}
-pytest  = { version = "^6.2.4", optional = true}
-pytest-cov  = { version = "^2.12.0", optional = true}
-tox  = { version = "^3.20.1", optional = true}
-virtualenv  = { version = "^20.2.2", optional = true}
-pip  = { version = "^20.3.1", optional = true}
-twine  = { version = "^3.3.0", optional = true}
-pre-commit = {version = "^2.12.0", optional = true}
-toml = {version = "^0.10.2", optional = true}
-bump2version = {version = "^1.0.1", optional = true}
-mkdocs = {version = "^1.4.2", optional = true}
-mkdocs-include-markdown-plugin = {version = "^4.0.3", optional = true}
-mkdocs-material = {version = "^8.5.11", optional = true}
-mkdocs-autorefs = {version = "^0.4.1", optional = true}
-mkdocstrings = {version = "^0.19.1", extras = ["python"], optional = true}
-mkdocs-material-extensions = {version = "^1.1.1", optional = true}
-jupyter = { version = "^1.0.0", optional = true }
+# black = {version = ">=22.3.0", optional = true}
+# isort  = { version = "^5.8.0", optional = true}
+# flake8  = { version = "^3.9.2", optional = true}
+# flake8-docstrings = { version = "^1.6.0", optional = true }
+# mypy = {version = "^0.900", optional = true}
+# pytest  = { version = "^6.2.4", optional = true}
+# pytest-cov  = { version = "^2.12.0", optional = true}
+# tox  = { version = "^3.20.1", optional = true}
+# virtualenv  = { version = "^20.2.2", optional = true}
+# pip  = { version = "^20.3.1", optional = true}
+# twine  = { version = "^3.3.0", optional = true}
+# pre-commit = {version = "^2.12.0", optional = true}
+# toml = {version = "^0.10.2", optional = true}
+# bump2version = {version = "^1.0.1", optional = true}
+# mkdocs = {version = "^1.4.2", optional = true}
+# mkdocs-include-markdown-plugin = {version = "^4.0.3", optional = true}
+# mkdocs-material = {version = "^8.5.11", optional = true}
+# mkdocs-autorefs = {version = "^0.4.1", optional = true}
+# mkdocstrings = {version = "^0.19.1", extras = ["python"], optional = true}
+# mkdocs-material-extensions = {version = "^1.1.1", optional = true}
+# jupyter = { version = "^1.0.0", optional = true }
 pandas = "^1.5.3"
 rich = "^13.3.1"
 liftover = "^1.1.16"
@@ -54,27 +54,50 @@ pytabix = "^0.1"
 scipy = "^1.10.1"
 matplotlib = "^3.7.1"
 
-[tool.poetry.extras]
-test = [
-    "pytest",
-    "black",
-    "isort",
-    "mypy",
-    "flake8",
-    "flake8-docstrings",
-    "pytest-cov"
-    ]
+[tool.poetry.dev-dependencies]
+black = ">=22.3.0"
+isort = "^5.8.0"
+flake8 = "^3.9.2"
+flake8-docstrings = "^1.6.0"
+mypy = "^0.990"
+pytest = "^6.2.4"
+pytest-cov = "^2.12.0"
+tox = "^3.20.1"
+virtualenv = "^20.2.2"
+pip = "^20.3.1"
+twine = "^3.3.0"
+pre-commit = "^2.12.0"
+toml = "^0.10.2"
+bump2version = "^1.0.1"
+mkdocs = "^1.4.2"
+mkdocs-include-markdown-plugin = "^4.0.3"
+mkdocs-material = "^8.5.11"
+mkdocs-autorefs = "^0.4.1"
+mkdocstrings = "^0.19.1"
+mkdocs-material-extensions = "^1.1.1"
+jupyter = "^1.0.0"
 
-dev = ["tox", "pre-commit", "virtualenv", "pip", "twine", "toml", "bump2version"]
+# [tool.poetry.extras]
+# test = [
+#     "pytest",
+#     "black",
+#     "isort",
+#     "mypy",
+#     "flake8",
+#     "flake8-docstrings",
+#     "pytest-cov"
+#     ]
 
-doc = [
-    "mkdocs",
-    "mkdocs-include-markdown-plugin",
-    "mkdocs-material",
-    "mkdocstrings",
-    "mkdocs-material-extension",
-    "mkdocs-autorefs"
-    ]
+# dev = ["tox", "pre-commit", "virtualenv", "pip", "twine", "toml", "bump2version"]
+
+# doc = [
+#     "mkdocs",
+#     "mkdocs-include-markdown-plugin",
+#     "mkdocs-material",
+#     "mkdocstrings",
+#     "mkdocs-material-extension",
+#     "mkdocs-autorefs"
+#     ]
 
 
 [tool.poetry.scripts]

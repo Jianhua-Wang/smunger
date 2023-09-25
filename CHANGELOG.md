@@ -1,5 +1,10 @@
 # Changelog
 
+
+## [0.1.2] (2023-09-25)
+
+* fix dependencies
+
 ## [0.1.1] (2023-06-24)
 
 * fix liftover output duplicate headers
