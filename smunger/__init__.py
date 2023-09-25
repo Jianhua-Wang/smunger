@@ -30,7 +30,7 @@ from .plots import qqplot, get_qq_df, manhattan, get_manh_df, qqman
 
 __author__ = """Jianhua Wang"""
 __email__ = 'jianhua.mert@gmail.com'
-__version__ = '0.1.4'
+__version__ = '0.1.5'
 
 # Set up logging
 logging.basicConfig(
