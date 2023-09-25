@@ -22,7 +22,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.12"
+python = ">=3.9,<3.13"
 typer = "^0.7.0"
 
 # black = {version = ">=22.3.0", optional = true}
@@ -53,29 +53,31 @@ requests = "^2.28.2"
 pytabix = "^0.1"
 scipy = "^1.10.1"
 matplotlib = "^3.7.1"
+numpy = "^1.26.0"
+
 
 [tool.poetry.dev-dependencies]
-black = ">=22.3.0"
-isort = "^5.8.0"
-flake8 = "^3.9.2"
-flake8-docstrings = "^1.6.0"
-mypy = "^0.990"
-pytest = "^6.2.4"
-pytest-cov = "^2.12.0"
-tox = "^3.20.1"
-virtualenv = "^20.2.2"
-pip = "^20.3.1"
-twine = "^3.3.0"
-pre-commit = "^2.12.0"
+black = "^23.9.1"
+isort = "^5.12.0"
+flake8 = "^6.1.0"
+flake8-docstrings = "^1.7.0"
+mypy = "^1.5.1"
+pytest = "^7.4.2"
+pytest-cov = "^4.1.0"
+tox = "^4.11.3"
+virtualenv = "^20.24.5"
+pip = "^23.2.1"
+twine = "^4.0.2"
+pre-commit = "^3.4.0"
 toml = "^0.10.2"
 bump2version = "^1.0.1"
+jupyter = "^1.0.0"
 mkdocs = "^1.5.3"
 mkdocs-include-markdown-plugin = "^6.0.1"
 mkdocs-material = "^9.4.2"
 mkdocs-autorefs = "^0.5.0"
 mkdocstrings-python = "^1.7.0"
 mkdocs-material-extensions = "^1.2"
-jupyter = "^1.0.0"
 
 # [tool.poetry.extras]
 # test = [
