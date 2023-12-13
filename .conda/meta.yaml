@@ -1,0 +1,46 @@
+{% set version = "0.1.5" %}
+
+package:
+  name: smunger
+  version: {{ version }}
+
+source:
+  url: https://github.com/Jianhua-Wang/smunger/archive/refs/tags/v{{ version }}.tar.gz
+
+build:
+  noarch: python
+  number: 0
+  script: python -m pip install --no-deps --ignore-installed .
+
+requirements:
+  host:
+    - python >=3.9
+    - pip
+    - poetry
+  build:
+    - numpy >=1.26.0
+  run:
+    - python >=3.9
+    - pandas >=1.5.3
+    - rich >=13.3.1
+    - liftover >=1.1.16
+    - requests >=2.28.2
+    - pytabix >=0.1
+    - scipy >=1.10.1
+    - matplotlib >=3.7.1
+    - numpy >=1.26.0
+    - typer >=0.7.0
+
+
+test:
+  imports:
+    - smunger
+  commands:
+    - smunger --help
+
+about:
+  home: https://github.com/Jianhua-Wang/smunger
+  license: MIT
+  summary: munger for GWAS summary statistics
+  description: munger for GWAS summary statistics
+  doc_url: https://Jianhua-Wang.github.io/smunger

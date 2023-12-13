@@ -25,12 +25,17 @@ from .smunger import (
     harmonize,
 )
 from .liftover import liftover, liftover_file
-from .annotate import annotate_rsid, annotate_rsid_file
+from .annotate import (
+    annotate_rsid,
+    annotate_rsid_file,
+    annotate_pos_alleles_from_rsid,
+    annotate_pos_alleles_from_rsid_file,
+)
 from .plots import qqplot, get_qq_df, manhattan, get_manh_df, qqman
 
 __author__ = """Jianhua Wang"""
-__email__ = 'jianhua.mert@gmail.com'
-__version__ = '0.1.5'
+__email__ = "jianhua.mert@gmail.com"
+__version__ = "0.1.5"
 
 # Set up logging
 logging.basicConfig(

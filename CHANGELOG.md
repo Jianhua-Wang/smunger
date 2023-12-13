@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.6] (2023-12-13)
+
+* annotate alleles from rsID and coordinates
+
 ## [0.1.5] (2023-09-25)
 
 * fix dependencies
