@@ -1,5 +1,5 @@
 # Changelog
-## [0.1.9] (2024-12-03)
+## [0.1.10] (2024-12-03)
 
 * update dependencies
 
