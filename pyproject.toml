@@ -23,7 +23,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
-typer = "^0.7.0"
+typer = ">=0.7.0"
 
 # black = {version = ">=22.3.0", optional = true}
 # isort  = { version = "^5.8.0", optional = true}
@@ -46,14 +46,14 @@ typer = "^0.7.0"
 # mkdocstrings = {version = "^0.19.1", extras = ["python"], optional = true}
 # mkdocs-material-extensions = {version = "^1.1.1", optional = true}
 # jupyter = { version = "^1.0.0", optional = true }
-pandas = "^1.5.3"
-rich = "^13.3.1"
-liftover = "^1.1.16"
-requests = "^2.28.2"
-pytabix = "^0.1"
-scipy = "^1.10.1"
-matplotlib = "^3.7.1"
-numpy = "^1.26.0"
+pandas = ">=1.5.3"
+rich = ">=13.3.1"
+liftover = ">=1.1.16"
+requests = ">=2.28.2"
+pytabix = ">=0.1"
+scipy = ">=1.10.1"
+matplotlib = ">=3.7.1"
+numpy = ">=1.26.0"
 
 
 [tool.poetry.dev-dependencies]

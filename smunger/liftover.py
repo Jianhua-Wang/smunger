@@ -86,7 +86,7 @@ def liftover(
     df = munge_bp(df)
     df[ColName.CHR] = 'chr' + df[ColName.CHR].astype(str)
     df[ColName.CHR] = df[ColName.CHR].str.replace('chr23', 'chrX')
-    df[outbuild] = df[[ColName.CHR, ColName.BP]].apply(lambda x: lo.query(x[0], x[1]), axis=1)
+    df[outbuild] = df.loc[:, [ColName.CHR, ColName.BP]].apply(lambda x: lo.query(x[0], x[1]), axis=1)
     df[ColName.CHR] = df[outbuild].apply(lambda x: x[0][0] if len(x) > 0 else 0)
     df[ColName.BP] = df[outbuild].apply(lambda x: x[0][1] if len(x) > 0 else 0)
     df.drop(outbuild, axis=1, inplace=True)

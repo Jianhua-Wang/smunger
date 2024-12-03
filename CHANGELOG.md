@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.6] (2024-12-03)
+
+* fix `ser.iloc[pos]` warning
+
 ## [0.1.6] (2023-12-13)
 
 * annotate alleles from rsID and coordinates
