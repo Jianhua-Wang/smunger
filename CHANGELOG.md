@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.1.6] (2024-12-03)
+## [0.1.7] (2024-12-03)
 
 * fix `ser.iloc[pos]` warning
 
