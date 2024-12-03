@@ -2,32 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://jianhua.github.io/smunger/</loc>
-         <lastmod>2023-12-13</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-12-03</lastmod>
     </url>
     <url>
          <loc>https://jianhua.github.io/smunger/api/</loc>
-         <lastmod>2023-12-13</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-12-03</lastmod>
     </url>
     <url>
          <loc>https://jianhua.github.io/smunger/changelog/</loc>
-         <lastmod>2023-12-13</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-12-03</lastmod>
     </url>
     <url>
          <loc>https://jianhua.github.io/smunger/contributing/</loc>
-         <lastmod>2023-12-13</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-12-03</lastmod>
     </url>
     <url>
          <loc>https://jianhua.github.io/smunger/installation/</loc>
-         <lastmod>2023-12-13</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-12-03</lastmod>
     </url>
     <url>
          <loc>https://jianhua.github.io/smunger/usage/</loc>
-         <lastmod>2023-12-13</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-12-03</lastmod>
     </url>
 </urlset>
